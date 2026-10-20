@@ -1,0 +1,1830 @@
+/* ============================================
+   Tokens
+   ============================================ */
+/* Variáveis globais de cor e fonte, reutilizadas em todo o site */
+:root {
+  --ink: #1B3A5C; /* cor do texto principal (azul escuro) */
+  --ink-soft: #5C7085; /* cor do texto secundário (cinza-azulado) */
+  --paper: #F8F5EE; /* cor de fundo creme */
+  --garden: #1B3A5C; /* azul-marinho da marca */
+  --garden-soft: #DCEDF6; /* azul bem clarinho */
+  --brass: #2E8079; /* verde-azulado de destaque */
+  --brass-soft: #DCEEE9; /* verde bem clarinho */
+  --line: #D9CDA9; /* cor das bordas (bege) */
+  --white: #FFFFFF; /* branco */
+
+  --font-display: "Fraunces", serif; /* fonte dos títulos */
+  --font-body: "Public Sans", sans-serif; /* fonte do texto normal */
+  --font-mono: "IBM Plex Mono", monospace; /* fonte de máquina de escrever */
+}
+
+/* Faz padding/border entrarem na largura/altura declarada de qualquer elemento */
+* { box-sizing: border-box; } /* tamanho inclui borda e espaço interno */
+
+/* Reset básico de margem/padding e estilo base de texto do documento */
+html, body {
+  margin: 0; /* sem espaço por fora */
+  padding: 0; /* sem espaço por dentro */
+  background: var(--white); /* cor/fundo */
+  color: var(--ink); /* cor do texto */
+  font-family: var(--font-body); /* tipo de fonte */
+}
+
+/* ============================================
+   Layout
+   ============================================ */
+/* Contêiner central das páginas internas (ex: calculadora de orçamento) */
+.page {
+  max-width: 980px; /* largura máxima */
+  margin: 0 auto; /* centraliza na página */
+  padding: 72px 24px 100px; /* espaço por dentro */
+}
+
+/* Link de "voltar" no topo das páginas internas */
+.back-home {
+  display: inline-block; /* fica na linha, mas aceita tamanho */
+  font-family: var(--font-mono); /* tipo de fonte */
+  font-size: 12px; /* tamanho da letra */
+  letter-spacing: 0.06em; /* espaço entre as letras */
+  color: var(--ink-soft); /* cor do texto */
+  text-decoration: none; /* tira o sublinhado */
+  margin: 24px 0 0 24px; /* espaço por fora */
+  transition: color 0.15s ease; /* deixa a mudança suave */
+}
+
+/* Cor do link "voltar" ao passar o mouse */
+.back-home:hover {
+  color: var(--garden); /* cor do texto */
+}
+
+/* Bloco de título centralizado no topo da página de orçamento */
+.calc-hero {
+  text-align: center; /* texto centralizado */
+  margin-bottom: 56px; /* espaço por fora embaixo */
+}
+
+/* Texto pequeno em destaque (rótulo) usado acima de títulos */
+.eyebrow {
+  font-family: var(--font-mono); /* tipo de fonte */
+  font-size: 12px; /* tamanho da letra */
+  letter-spacing: 0.14em; /* espaço entre as letras */
+  text-transform: uppercase; /* deixa em MAIÚSCULAS */
+  color: var(--brass); /* cor do texto */
+  margin: 0 0 18px; /* espaço por fora */
+}
+
+/* Título principal da página de orçamento */
+.calc-hero h1 {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-weight: 500; /* grossura da letra */
+  font-size: clamp(36px, 6vw, 56px); /* tamanho da letra */
+  line-height: 1.08; /* altura da linha de texto */
+  margin: 0 0 16px; /* espaço por fora */
+  color: var(--garden); /* cor do texto */
+}
+
+/* Subtítulo/texto de apoio abaixo do título */
+.hero-sub {
+  font-size: 16px; /* tamanho da letra */
+  color: var(--ink-soft); /* cor do texto */
+  max-width: 440px; /* largura máxima */
+  margin: 0 auto; /* centraliza na página */
+}
+
+/* Grade de duas colunas: formulário à esquerda, ticket de resultado à direita */
+.layout {
+  display: grid; /* organiza os filhos em grade */
+  grid-template-columns: 1.1fr 0.9fr; /* colunas da grade */
+  gap: 32px; /* espaço entre os filhos */
+  align-items: start; /* alinha no topo */
+}
+
+/* Em telas estreitas, empilha o formulário e o ticket em uma única coluna */
+@media (max-width: 800px) {
+  .layout { grid-template-columns: 1fr; } /* 1 coluna no celular */
+}
+
+/* ============================================
+   Form card
+   ============================================ */
+/* Cartão que envolve o formulário de orçamento */
+.card {
+  background: var(--paper); /* cor/fundo */
+  border: 1px solid var(--line); /* borda */
+  border-radius: 4px; /* arredonda os cantos */
+  padding: 40px; /* espaço por dentro */
+}
+
+/* Espaçamento padrão entre campos do formulário */
+.field {
+  margin-bottom: 28px; /* espaço por fora embaixo */
+}
+
+/* Espaçamento maior após o último campo, antes do botão de enviar */
+.field:last-of-type {
+  margin-bottom: 32px; /* espaço por fora embaixo */
+}
+
+/* Estilo padrão dos rótulos (labels) dos campos */
+label, .field-label {
+  display: block; /* ocupa a linha toda */
+  font-size: 13px; /* tamanho da letra */
+  font-weight: 600; /* grossura da letra */
+  letter-spacing: 0.01em; /* espaço entre as letras */
+  color: var(--garden); /* cor do texto */
+  margin-bottom: 10px; /* espaço por fora embaixo */
+}
+
+/* Estilo base de inputs de texto/número/telefone/e-mail e selects */
+input[type="number"],
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+select {
+  width: 100%; /* largura toda */
+  font-family: var(--font-body); /* tipo de fonte */
+  font-size: 16px; /* tamanho da letra */
+  padding: 12px 4px; /* espaço por dentro */
+  border: none; /* sem borda */
+  border-bottom: 1.5px solid var(--line); /* borda de baixo */
+  background: transparent; /* fundo transparente */
+  color: var(--ink); /* cor do texto */
+  border-radius: 0; /* cantos retos */
+  appearance: none; /* tira o visual padrão do navegador */
+  -webkit-appearance: none; /* mesmo que acima, para Safari/Chrome */
+}
+
+/* Ícone de seta customizado (SVG embutido) para os campos <select> */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231B3A5C' stroke-width='1.5' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E"); /* imagem de fundo (setinha desenhada) */
+  background-repeat: no-repeat; /* não repete a imagem de fundo */
+  background-position: right 4px center; /* posição da imagem de fundo */
+  padding-right: 20px; /* espaço por dentro à direita */
+}
+
+/* Realce da borda inferior ao focar em qualquer campo do formulário */
+input[type="number"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+select:focus {
+  outline: none; /* tira o contorno padrão */
+  border-bottom-color: var(--garden); /* cor da borda de baixo */
+}
+
+/* --- Campos com label flutuante e foco animado --- */
+/* Contêiner posicionado que permite o label "flutuar" sobre o campo */
+.field--float {
+  position: relative; /* serve de referência para filhos posicionados */
+}
+
+/* Reserva espaço vertical no campo para o label flutuante não sobrepor o texto digitado */
+.field--float input,
+.field--float select {
+  padding-top: 22px; /* espaço por dentro em cima */
+  padding-bottom: 8px; /* espaço por dentro embaixo */
+  position: relative; /* serve de referência para filhos posicionados */
+  z-index: 1; /* ordem de camada (maior fica por cima) */
+}
+
+/* Posição inicial do label, sobreposto ao campo antes de ser preenchido */
+.field--float label {
+  position: absolute; /* posição livre dentro do pai */
+  left: 4px; /* distância da esquerda */
+  top: 24px; /* distância do topo */
+  margin: 0; /* sem espaço por fora */
+  font-size: 16px; /* tamanho da letra */
+  font-weight: 400; /* grossura da letra */
+  color: var(--ink-soft); /* cor do texto */
+  letter-spacing: 0; /* espaço entre as letras */
+  pointer-events: none; /* mouse não interage com ele */
+  transform-origin: left top; /* ponto de onde gira/aumenta */
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), color 0.22s ease; /* deixa a mudança suave */
+}
+
+/* Anima o label para cima e diminui seu tamanho quando o campo está focado ou preenchido */
+.field--float input:focus ~ label,
+.field--float input:not(:placeholder-shown) ~ label,
+.field--float select:focus ~ label,
+.field--float select:valid ~ label {
+  transform: translateY(-16px) scale(0.76); /* move/gira/aumenta o elemento */
+  color: var(--brass); /* cor do texto */
+}
+
+/* Linha inferior animada (indicador de foco) escondida por padrão */
+.field--float::after {
+  content: ""; /* cria um elemento vazio (decorativo) */
+  position: absolute; /* posição livre dentro do pai */
+  left: 0; /* distância da esquerda */
+  right: 0; /* distância da direita */
+  bottom: 0; /* distância de baixo */
+  height: 1.5px; /* altura */
+  background: var(--garden); /* cor/fundo */
+  transform: scaleX(0); /* move/gira/aumenta o elemento */
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); /* deixa a mudança suave */
+}
+
+/* Revela a linha inferior animada quando o campo está em foco */
+.field--float:focus-within::after { transform: scaleX(1); } /* mostra a linha ao focar */
+
+/* Estado de erro: linha inferior fica vermelha e sempre visível */
+.field--float.field--error::after {
+  background: #B23A3A; /* cor/fundo */
+  transform: scaleX(1); /* move/gira/aumenta o elemento */
+}
+
+/* Texto de mensagem de erro abaixo de um campo */
+.lead-error {
+  display: block; /* ocupa a linha toda */
+  font-size: 12px; /* tamanho da letra */
+  color: #B23A3A; /* cor do texto */
+  min-height: 16px; /* altura mínima */
+  margin-top: 6px; /* espaço por fora em cima */
+}
+
+/* --- Modal de captação de contato --- */
+/* Fundo escurecido em tela cheia que centraliza o modal de captação de lead */
+.lead-modal {
+  position: fixed; /* fica preso na tela ao rolar */
+  inset: 0; /* gruda nos 4 lados (tela/caixa inteira) */
+  z-index: 600; /* ordem de camada (maior fica por cima) */
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  justify-content: center; /* centraliza na horizontal */
+  padding: 24px; /* espaço por dentro */
+  background: rgba(15, 34, 54, 0.6); /* cor/fundo */
+  backdrop-filter: blur(4px); /* desfoca o que está atrás */
+}
+
+/* Esconde completamente o modal quando o atributo "hidden" está presente */
+.lead-modal[hidden] { display: none; } /* some quando está hidden */
+
+/* Cartão branco do modal, com sombra e animação de entrada */
+.lead-modal-card {
+  background: var(--paper); /* cor/fundo */
+  border-radius: 6px; /* arredonda os cantos */
+  padding: 40px; /* espaço por dentro */
+  max-width: 420px; /* largura máxima */
+  width: 100%; /* largura toda */
+  box-shadow: 0 40px 90px -20px rgba(0, 0, 0, 0.45); /* sombra */
+  animation: leadModalIn 0.45s cubic-bezier(0.22, 1, 0.36, 1); /* animação usada */
+}
+
+/* Animação de entrada do cartão do modal (sobe e ganha opacidade) */
+@keyframes leadModalIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.96); } /* começo da animação */
+  to { opacity: 1; transform: none; } /* fim da animação */
+}
+
+/* Título dentro do modal de captação */
+.lead-modal-card h2 {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-size: 28px; /* tamanho da letra */
+  font-weight: 500; /* grossura da letra */
+  color: var(--garden); /* cor do texto */
+  margin: 6px 0 8px; /* espaço por fora */
+}
+
+/* Texto explicativo abaixo do título do modal */
+.lead-modal-sub {
+  font-size: 14px; /* tamanho da letra */
+  color: var(--ink-soft); /* cor do texto */
+  line-height: 1.5; /* altura da linha de texto */
+  margin: 0 0 28px; /* espaço por fora */
+}
+
+/* Espaçamento reduzido entre campos dentro do modal (mais compacto que o formulário principal) */
+.lead-modal-card .field { margin-bottom: 8px; } /* campos mais juntos no modal */
+
+/* Botão de enviar do modal, ocupando toda a largura */
+.lead-modal-submit {
+  width: 100%; /* largura toda */
+  margin-top: 14px; /* espaço por fora em cima */
+}
+
+/* Texto de dica pequeno, exibido abaixo de campos ou botões */
+.hint {
+  display: block; /* ocupa a linha toda */
+  font-size: 12px; /* tamanho da letra */
+  color: var(--ink-soft); /* cor do texto */
+  margin-top: 8px; /* espaço por fora em cima */
+}
+
+/* checkboxes as pills */
+/* Linha flexível que organiza as opções de checkbox em formato de pílula */
+.check-row {
+  display: flex; /* organiza os filhos em linha (flex) */
+  gap: 10px; /* espaço entre os filhos */
+  flex-wrap: wrap; /* quebra para a linha de baixo se faltar espaço */
+}
+
+/* Aparência de cada opção de checkbox como uma pílula clicável */
+.check-pill {
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  gap: 8px; /* espaço entre os filhos */
+  padding: 10px 18px; /* espaço por dentro */
+  border: 1.5px solid var(--line); /* borda */
+  border-radius: 999px; /* formato de pílula/círculo */
+  cursor: pointer; /* mostra a mãozinha */
+  font-size: 14px; /* tamanho da letra */
+  margin: 0; /* sem espaço por fora */
+  transition: border-color 0.15s ease, background 0.15s ease; /* deixa a mudança suave */
+}
+
+/* Destaca a pílula quando seu checkbox interno está marcado */
+.check-pill:has(input:checked) {
+  border-color: var(--garden); /* cor da borda */
+  background: var(--garden-soft); /* cor/fundo */
+}
+
+/* Cor de destaque do próprio checkbox dentro da pílula */
+.check-pill input {
+  accent-color: var(--garden); /* cor do checkbox/rádio */
+  margin: 0; /* sem espaço por fora */
+}
+
+/* radio list */
+/* Lista vertical de opções de rádio (ex: escolha de alojamento) */
+.radio-list {
+  display: flex; /* organiza os filhos em linha (flex) */
+  flex-direction: column; /* filhos um embaixo do outro */
+  gap: 12px; /* espaço entre os filhos */
+}
+
+/* Linha de cada opção de rádio, com o botão e o texto lado a lado */
+.radio-row {
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  gap: 10px; /* espaço entre os filhos */
+  font-size: 14px; /* tamanho da letra */
+  cursor: pointer; /* mostra a mãozinha */
+  margin: 0; /* sem espaço por fora */
+}
+
+/* Cor de destaque do botão de rádio */
+.radio-row input {
+  accent-color: var(--garden); /* cor do checkbox/rádio */
+}
+
+/* submit */
+/* Botão principal de envio do formulário, ocupando toda a largura */
+.submit-btn {
+  width: 100%; /* largura toda */
+  background: var(--garden); /* cor/fundo */
+  color: var(--white); /* cor do texto */
+  border: none; /* sem borda */
+  padding: 16px; /* espaço por dentro */
+  font-family: var(--font-body); /* tipo de fonte */
+  font-size: 14px; /* tamanho da letra */
+  font-weight: 600; /* grossura da letra */
+  letter-spacing: 0.03em; /* espaço entre as letras */
+  text-transform: uppercase; /* deixa em MAIÚSCULAS */
+  border-radius: 3px; /* arredonda os cantos */
+  cursor: pointer; /* mostra a mãozinha */
+  transition: background 0.15s ease; /* deixa a mudança suave */
+}
+
+/* Escurece o botão de envio ao passar o mouse */
+.submit-btn:hover {
+  background: #122C46; /* cor/fundo */
+}
+
+/* Mensagem de erro geral do formulário (ex: campos obrigatórios faltando) */
+.erro {
+  color: #B23A3A; /* cor do texto */
+  font-size: 13px; /* tamanho da letra */
+  margin: 16px 0 0; /* espaço por fora */
+}
+
+/* ============================================
+   Ticket (result)
+   ============================================ */
+/* Contêiner do ticket de resultado, fixo na tela ao rolar a página */
+.ticket-slot {
+  position: sticky; /* gruda na tela ao rolar */
+  top: 40px; /* distância do topo */
+  perspective: 900px; /* profundidade 3D */
+}
+
+/* Estado vazio exibido antes do orçamento ser calculado */
+.ticket-empty {
+  border: 1.5px dashed var(--line); /* borda */
+  border-radius: 4px; /* arredonda os cantos */
+  padding: 60px 24px; /* espaço por dentro */
+  text-align: center; /* texto centralizado */
+  color: var(--ink-soft); /* cor do texto */
+  font-size: 14px; /* tamanho da letra */
+}
+
+/* Cartão do ticket de orçamento já calculado, com efeito de "impressão" */
+.ticket {
+  background: var(--garden); /* cor/fundo */
+  color: var(--paper); /* cor do texto */
+  border-radius: 4px; /* arredonda os cantos */
+  overflow: hidden; /* esconde o que passar da caixa */
+  box-shadow: 0 24px 48px -20px rgba(27, 58, 92, 0.45); /* sombra */
+  transform-origin: top center; /* ponto de onde gira/aumenta */
+  animation: ticketPrint 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; /* animação usada */
+}
+
+/* Animação do ticket "saindo da impressora" de cima para baixo */
+@keyframes ticketPrint {
+  0% {
+    opacity: 0; /* invisível */
+    transform: translateY(-36px) rotateX(-30deg); /* move/gira/aumenta o elemento */
+    clip-path: inset(0 0 100% 0); /* recorta a parte visível */
+  }
+  55% {
+    opacity: 1; /* visível */
+    clip-path: inset(0 0 0% 0); /* recorta a parte visível */
+  }
+  100% {
+    opacity: 1; /* visível */
+    transform: translateY(0) rotateX(0deg); /* move/gira/aumenta o elemento */
+    clip-path: inset(0 0 0% 0); /* recorta a parte visível */
+  }
+}
+
+/* Desativa a animação do ticket para quem prefere menos movimento na tela */
+@media (prefers-reduced-motion: reduce) {
+  .ticket { animation: none; } /* sem animação */
+}
+
+/* Cabeçalho do ticket, com o valor total centralizado */
+.ticket-top {
+  padding: 32px 32px 24px; /* espaço por dentro */
+  text-align: center; /* texto centralizado */
+}
+
+/* Rótulo pequeno acima do valor total no ticket */
+.ticket-eyebrow {
+  font-family: var(--font-mono); /* tipo de fonte */
+  font-size: 11px; /* tamanho da letra */
+  letter-spacing: 0.14em; /* espaço entre as letras */
+  text-transform: uppercase; /* deixa em MAIÚSCULAS */
+  color: var(--brass-soft); /* cor do texto */
+  margin: 0 0 10px; /* espaço por fora */
+  opacity: 0.85; /* transparência (0 = invisível, 1 = visível) */
+}
+
+/* Valor total do orçamento, em destaque no ticket */
+.ticket-total {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-size: 42px; /* tamanho da letra */
+  font-weight: 500; /* grossura da letra */
+  margin: 0; /* sem espaço por fora */
+  color: var(--white); /* cor do texto */
+}
+
+/* Linha pontilhada que simula a perfuração entre as partes do ticket */
+.ticket-perf {
+  height: 0; /* altura */
+  border-top: 1.5px dashed rgba(245, 236, 217, 0.35); /* borda de cima */
+  margin: 0 24px; /* espaço por fora */
+  position: relative; /* serve de referência para filhos posicionados */
+}
+
+/* Corpo do ticket, onde ficam os itens detalhados */
+.ticket-body {
+  padding: 24px 32px; /* espaço por dentro */
+}
+
+/* Cada linha de item do ticket (nome à esquerda, valor à direita) */
+.ticket-line {
+  display: flex; /* organiza os filhos em linha (flex) */
+  justify-content: space-between; /* um em cada ponta */
+  font-family: var(--font-mono); /* tipo de fonte */
+  font-size: 13px; /* tamanho da letra */
+  padding: 8px 0; /* espaço por dentro */
+  color: var(--paper); /* cor do texto */
+  opacity: 0.92; /* transparência (0 = invisível, 1 = visível) */
+}
+
+/* Variação mais discreta de linha do ticket (ex: texto de desconto) */
+.ticket-line--muted {
+  color: var(--brass-soft); /* cor do texto */
+  opacity: 0.8; /* transparência (0 = invisível, 1 = visível) */
+}
+
+/* Rodapé do ticket com texto de encerramento */
+.ticket-footer {
+  text-align: center; /* texto centralizado */
+  font-size: 11px; /* tamanho da letra */
+  letter-spacing: 0.08em; /* espaço entre as letras */
+  text-transform: uppercase; /* deixa em MAIÚSCULAS */
+  color: var(--brass-soft); /* cor do texto */
+  padding: 18px 24px 28px; /* espaço por dentro */
+  margin: 0; /* sem espaço por fora */
+  opacity: 0.75; /* transparência (0 = invisível, 1 = visível) */
+}
+
+/* ============================================
+   Home page
+   ============================================ */
+/* Evita barra de rolagem horizontal causada pelos elementos decorativos da home */
+body.home { overflow-x: hidden; } /* sem rolagem para os lados */
+
+/* --- Smooth scroll (inércia) --- */
+/* Contêiner de todo o conteúdo da home, movido via JS para simular rolagem suave */
+.smooth-wrapper { will-change: transform; } /* avisa o navegador que vai mover */
+
+/* Quando o JS de scroll suave está ativo, fixa o wrapper na tela para ser deslocado manualmente */
+body.js-smooth .smooth-wrapper {
+  position: fixed; /* fica preso na tela ao rolar */
+  top: 0; /* distância do topo */
+  left: 0; /* distância da esquerda */
+  width: 100%; /* largura toda */
+}
+
+/* Desativa o scroll suave customizado para quem prefere menos animação, voltando ao scroll nativo */
+@media (prefers-reduced-motion: reduce) {
+  body.js-smooth .smooth-wrapper {
+    position: static; /* posição normal */
+    transform: none !important; /* move/gira/aumenta o elemento */
+  }
+}
+
+/* --- Loader inicial (cortina) --- */
+/* Camada de tela cheia que cobre a página durante o carregamento inicial */
+.loader {
+  position: fixed; /* fica preso na tela ao rolar */
+  inset: 0; /* gruda nos 4 lados (tela/caixa inteira) */
+  z-index: 1000; /* ordem de camada (maior fica por cima) */
+  pointer-events: none; /* mouse não interage com ele */
+}
+
+/* Cada uma das duas metades da cortina de carregamento */
+.loader-panel {
+  position: absolute; /* posição livre dentro do pai */
+  top: 0; /* distância do topo */
+  bottom: 0; /* distância de baixo */
+  width: 50%; /* largura */
+  background: var(--garden); /* cor/fundo */
+  transition: transform 1.1s cubic-bezier(0.76, 0, 0.24, 1); /* deixa a mudança suave */
+}
+
+/* Posiciona o painel esquerdo encostado à esquerda da tela */
+.loader-panel--left { left: 0; } /* metade da esquerda */
+/* Posiciona o painel direito encostado à direita da tela */
+.loader-panel--right { right: 0; } /* metade da direita */
+
+/* Ao abrir, desliza o painel esquerdo para fora da tela pela esquerda */
+.loader--open .loader-panel--left { transform: translateX(-100%); } /* esquerda sai pela esquerda */
+/* Ao abrir, desliza o painel direito para fora da tela pela direita */
+.loader--open .loader-panel--right { transform: translateX(100%); } /* direita sai pela direita */
+
+/* Logo centralizado exibido sobre a cortina enquanto ela está fechada */
+.loader-mark {
+  position: absolute; /* posição livre dentro do pai */
+  top: 50%; /* distância do topo */
+  left: 50%; /* distância da esquerda */
+  color: var(--paper); /* cor do texto */
+  opacity: 1; /* visível */
+  transform: translate(-50%, -50%) scale(1); /* move/gira/aumenta o elemento */
+  transition: opacity 0.45s ease, transform 0.45s ease; /* deixa a mudança suave */
+}
+
+/* Desaparece e encolhe o logo quando a cortina abre */
+.loader--open .loader-mark {
+  opacity: 0; /* invisível */
+  transform: translate(-50%, -50%) scale(0.6); /* move/gira/aumenta o elemento */
+}
+
+/* Trava o scroll da página enquanto o carregamento inicial está em andamento */
+body.is-loading { overflow: hidden; } /* trava a rolagem */
+
+/* --- Rastro de pétalas no cursor (hero) --- */
+/* Estilo de cada pétala individual criada ao mover o mouse sobre a página */
+.cursor-petal {
+  position: fixed; /* fica preso na tela ao rolar */
+  top: 0; /* distância do topo */
+  left: 0; /* distância da esquerda */
+  z-index: 5; /* ordem de camada (maior fica por cima) */
+  color: #F2C14E; /* cor do texto */
+  text-shadow: 0 0 6px rgba(242, 193, 78, 0.5); /* sombra no texto */
+  pointer-events: none; /* mouse não interage com ele */
+  animation: petalTrailFade 1.1s ease-out forwards; /* animação usada */
+}
+
+/* Animação de sumiço e queda leve da pétala do cursor */
+@keyframes petalTrailFade {
+  0% { opacity: 0.9; transform: translate(-50%, -50%) scale(1) rotate(0deg); } /* começo da animação */
+  100% { opacity: 0; transform: translate(-50%, -90%) scale(0.4) rotate(50deg); } /* fim da animação */
+}
+
+/* --- Divisor animado entre seções --- */
+/* Contêiner centralizado do divisor decorativo entre seções da home */
+.divider {
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  justify-content: center; /* centraliza na horizontal */
+  position: relative; /* serve de referência para filhos posicionados */
+  max-width: 320px; /* largura máxima */
+  margin: 0 auto; /* centraliza na página */
+  padding: 0 24px; /* espaço por dentro */
+}
+
+/* Dimensões do SVG da linha ondulada do divisor */
+.divider-svg {
+  width: 100%; /* largura toda */
+  height: 32px; /* altura */
+  overflow: visible; /* deixa aparecer o que passar da caixa */
+}
+
+/* Traço da linha ondulada, animado como se estivesse sendo desenhado */
+.divider-line {
+  fill: none; /* sem preenchimento */
+  stroke: var(--line); /* cor da linha do desenho */
+  stroke-width: 1.5; /* grossura da linha do desenho */
+  stroke-dasharray: 1; /* linha tracejada (para animar) */
+  stroke-dashoffset: 1; /* quanto da linha aparece */
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.22, 1, 0.36, 1); /* deixa a mudança suave */
+}
+
+/* Revela a linha do divisor por completo quando a seção entra na tela */
+.divider.reveal--visible .divider-line { stroke-dashoffset: 0; } /* linha aparece inteira */
+
+/* Florzinha central do divisor, escondida e reduzida por padrão */
+.divider-bloom {
+  position: absolute; /* posição livre dentro do pai */
+  color: var(--brass); /* cor do texto */
+  opacity: 0; /* invisível */
+  transform: scale(0.2) rotate(-30deg); /* move/gira/aumenta o elemento */
+  transition: opacity 0.5s ease 1s, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1s; /* deixa a mudança suave */
+}
+
+/* Revela e amplia a florzinha central após a linha terminar de se desenhar */
+.divider.reveal--visible .divider-bloom {
+  opacity: 1; /* visível */
+  transform: scale(1) rotate(0deg); /* move/gira/aumenta o elemento */
+}
+
+/* --- Chuva de pétalas (orçamento calculado) --- */
+/* Camada de tela cheia que contém a animação de pétalas caindo */
+.petal-rain {
+  position: fixed; /* fica preso na tela ao rolar */
+  inset: 0; /* gruda nos 4 lados (tela/caixa inteira) */
+  z-index: 500; /* ordem de camada (maior fica por cima) */
+  overflow: hidden; /* esconde o que passar da caixa */
+  pointer-events: none; /* mouse não interage com ele */
+}
+
+/* Cada pétala individual que cai na animação de "chuva de pétalas" */
+.petal-fall {
+  position: absolute; /* posição livre dentro do pai */
+  top: -40px; /* distância do topo */
+  color: var(--brass); /* cor do texto */
+  animation-name: petalFall; /* nome da animação */
+  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); /* ritmo da animação */
+  animation-fill-mode: forwards; /* mantém o fim da animação */
+}
+
+/* Trajetória de queda: desce a tela toda enquanto gira e some aos poucos */
+@keyframes petalFall {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; } /* começo da animação */
+  8% { opacity: 1; } /* meio da animação */
+  100% { transform: translateY(105vh) translateX(var(--drift, 20px)) rotate(320deg); opacity: 0.15; } /* fim da animação */
+}
+
+/* --- Scroll progress bar --- */
+/* Barra fina fixa no topo indicando o progresso de leitura da página */
+.scroll-progress {
+  position: fixed; /* fica preso na tela ao rolar */
+  top: 0; /* distância do topo */
+  left: 0; /* distância da esquerda */
+  height: 3px; /* altura */
+  width: 0%; /* largura */
+  background: linear-gradient(90deg, var(--brass), var(--garden)); /* cor/fundo */
+  z-index: 200; /* ordem de camada (maior fica por cima) */
+  transition: width 0.1s linear; /* deixa a mudança suave */
+}
+
+/* Variante clara do texto "eyebrow", usada sobre fundos escuros */
+.eyebrow--light { color: var(--brass-soft); } /* cor clara */
+
+/* --- Navbar --- */
+/* Barra de navegação fixa no topo da página, transparente por padrão */
+.navbar {
+  position: fixed; /* fica preso na tela ao rolar */
+  top: 0; /* distância do topo */
+  left: 0; /* distância da esquerda */
+  right: 0; /* distância da direita */
+  z-index: 100; /* ordem de camada (maior fica por cima) */
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  justify-content: space-between; /* um em cada ponta */
+  padding: 22px 40px; /* espaço por dentro */
+  transition: background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease; /* deixa a mudança suave */
+}
+
+/* Aparência da navbar após o usuário rolar a página (fundo claro e sombra) */
+.navbar--scrolled {
+  background: rgba(248, 245, 238, 0.92); /* cor/fundo */
+  backdrop-filter: blur(8px); /* desfoca o que está atrás */
+  padding: 14px 40px; /* espaço por dentro */
+  box-shadow: 0 2px 20px rgba(27, 58, 92, 0.08); /* sombra */
+}
+
+/* Link da marca/logo na navbar */
+.brand {
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  gap: 10px; /* espaço entre os filhos */
+  text-decoration: none; /* tira o sublinhado */
+  color: var(--white); /* cor do texto */
+  transition: color 0.3s ease; /* deixa a mudança suave */
+}
+
+/* Cor da marca muda para escura quando a navbar está no estado "rolado" */
+.navbar--scrolled .brand { color: var(--ink); } /* logo fica escura */
+
+/* Ícone da marca, com leve rotação animada */
+.brand-mark { color: currentColor; display: flex; transition: transform 0.4s ease; } /* ícone da logo com giro suave */
+/* Gira o ícone da marca ao passar o mouse sobre o link */
+.brand:hover .brand-mark { transform: rotate(25deg); } /* gira a florzinha */
+
+/* Estilo do texto do nome da marca */
+.brand-name {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-size: 20px; /* tamanho da letra */
+  font-weight: 500; /* grossura da letra */
+  letter-spacing: 0.01em; /* espaço entre as letras */
+}
+
+/* Contêiner dos links de navegação, em linha */
+.nav-links {
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  gap: 32px; /* espaço entre os filhos */
+}
+
+/* Estilo padrão de cada link de navegação */
+.nav-links a {
+  color: var(--white); /* cor do texto */
+  text-decoration: none; /* tira o sublinhado */
+  font-size: 14px; /* tamanho da letra */
+  font-weight: 500; /* grossura da letra */
+  position: relative; /* serve de referência para filhos posicionados */
+  transition: color 0.3s ease; /* deixa a mudança suave */
+}
+
+/* Cor dos links muda para escura quando a navbar está no estado "rolado" */
+.navbar--scrolled .nav-links a { color: var(--ink); } /* links ficam escuros */
+
+/* Linha decorativa (sublinhado) escondida por padrão sob cada link, exceto o botão de CTA */
+.nav-links a:not(.nav-cta)::after {
+  content: ""; /* cria um elemento vazio (decorativo) */
+  position: absolute; /* posição livre dentro do pai */
+  left: 0; /* distância da esquerda */
+  bottom: -4px; /* distância de baixo */
+  width: 0; /* largura */
+  height: 1.5px; /* altura */
+  background: currentColor; /* cor/fundo */
+  transition: width 0.25s ease; /* deixa a mudança suave */
+}
+
+/* Expande o sublinhado de largura total ao passar o mouse sobre o link */
+.nav-links a:not(.nav-cta):hover::after { width: 100%; } /* sublinhado cresce */
+
+/* Botão de destaque "Solicitar orçamento" dentro da navbar, em formato de pílula */
+.nav-cta {
+  background: var(--brass); /* cor/fundo */
+  color: var(--white) !important; /* cor do texto */
+  padding: 10px 20px; /* espaço por dentro */
+  border-radius: 999px; /* formato de pílula/círculo */
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; /* deixa a mudança suave */
+}
+
+/* Efeito de destaque no botão de CTA ao passar o mouse */
+.nav-cta:hover {
+  background: #256b64; /* cor/fundo */
+  transform: translateY(-2px); /* move/gira/aumenta o elemento */
+  box-shadow: 0 10px 24px -8px rgba(46, 128, 121, 0.6); /* sombra */
+}
+
+/* shine sweep on hover */
+/* Contêiner do efeito de brilho que desliza sobre o botão */
+.shine {
+  position: relative; /* serve de referência para filhos posicionados */
+  overflow: hidden; /* esconde o que passar da caixa */
+}
+
+/* Faixa de brilho diagonal, posicionada fora da vista por padrão */
+.shine::before {
+  content: ""; /* cria um elemento vazio (decorativo) */
+  position: absolute; /* posição livre dentro do pai */
+  top: 0; /* distância do topo */
+  left: -60%; /* distância da esquerda */
+  width: 40%; /* largura */
+  height: 100%; /* altura toda */
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55), transparent); /* cor/fundo */
+  transform: skewX(-20deg); /* move/gira/aumenta o elemento */
+  transition: left 0.7s ease; /* deixa a mudança suave */
+}
+
+/* Desliza a faixa de brilho por todo o botão ao passar o mouse */
+.shine:hover::before { left: 130%; } /* brilho atravessa o botão */
+
+/* Botão "hambúrguer" do menu mobile, escondido em telas largas */
+.nav-toggle {
+  display: none; /* esconde o elemento */
+  flex-direction: column; /* filhos um embaixo do outro */
+  justify-content: center; /* centraliza na horizontal */
+  gap: 5px; /* espaço entre os filhos */
+  width: 32px; /* largura */
+  height: 32px; /* altura */
+  background: none; /* sem fundo */
+  border: none; /* sem borda */
+  cursor: pointer; /* mostra a mãozinha */
+  padding: 0; /* sem espaço por dentro */
+}
+
+/* Cada uma das três barrinhas do ícone hambúrguer */
+.nav-toggle span {
+  display: block; /* ocupa a linha toda */
+  height: 2px; /* altura */
+  width: 100%; /* largura toda */
+  background: var(--white); /* cor/fundo */
+  transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease; /* deixa a mudança suave */
+}
+
+/* Cor das barrinhas muda para escura quando a navbar está no estado "rolado" */
+.navbar--scrolled .nav-toggle span { background: var(--ink); } /* barrinhas ficam escuras */
+
+/* Transforma o ícone hambúrguer em um "X" quando o menu está aberto */
+.nav-toggle--open span:nth-child(1) { transform: translateY(7px) rotate(45deg); } /* barra 1 vira metade do X */
+.nav-toggle--open span:nth-child(2) { opacity: 0; } /* barra 2 some */
+.nav-toggle--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); } /* barra 3 vira outra metade do X */
+
+/* --- Hero --- */
+/* Seção de abertura em tela cheia, com imagem de fundo e conteúdo centralizado */
+.hero-home {
+  position: relative; /* serve de referência para filhos posicionados */
+  min-height: 100vh; /* pelo menos a altura da tela */
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  justify-content: center; /* centraliza na horizontal */
+  overflow: hidden; /* esconde o que passar da caixa */
+}
+
+/* Camada que posiciona a imagem de fundo do hero atrás do conteúdo */
+.hero-media {
+  position: absolute; /* posição livre dentro do pai */
+  inset: 0; /* gruda nos 4 lados (tela/caixa inteira) */
+  z-index: 0; /* ordem de camada (maior fica por cima) */
+}
+
+/* Imagem de fundo do hero, cobrindo toda a área com leve efeito de zoom inicial */
+.hero-media img {
+  width: 100%; /* largura toda */
+  height: 100%; /* altura toda */
+  object-fit: cover; /* imagem cobre a área sem distorcer */
+  animation: heroZoom 20s ease-out forwards; /* animação usada */
+}
+
+/* Efeito de zoom lento sobre a imagem de fundo, dando sensação de movimento */
+@keyframes heroZoom {
+  from { transform: scale(1.12); } /* começo da animação */
+  to { transform: scale(1); } /* fim da animação */
+}
+
+/* Gradiente escuro sobre a imagem do hero, para garantir contraste com o texto */
+.hero-overlay {
+  position: absolute; /* posição livre dentro do pai */
+  inset: 0; /* gruda nos 4 lados (tela/caixa inteira) */
+  background: linear-gradient(180deg, rgba(15, 34, 54, 0.55) 0%, rgba(15, 34, 54, 0.4) 45%, rgba(15, 34, 54, 0.75) 100%); /* cor/fundo */
+}
+
+/* Bloco de texto central do hero, acima da imagem e do overlay */
+.hero-content {
+  position: relative; /* serve de referência para filhos posicionados */
+  z-index: 2; /* ordem de camada (maior fica por cima) */
+  text-align: center; /* texto centralizado */
+  max-width: 720px; /* largura máxima */
+  padding: 0 24px; /* espaço por dentro */
+  color: var(--white); /* cor do texto */
+}
+
+/* Título principal do hero */
+.hero-content h1 {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-weight: 500; /* grossura da letra */
+  font-size: clamp(40px, 7vw, 68px); /* tamanho da letra */
+  line-height: 1.08; /* altura da linha de texto */
+  margin: 0 0 20px; /* espaço por fora */
+  color: var(--white); /* cor do texto */
+}
+
+/* Destaque em itálico e cor diferenciada para a palavra "memória" no título */
+.hero-content h1 em {
+  font-style: italic; /* letra em itálico */
+  color: var(--brass-soft); /* cor do texto */
+}
+
+/* Estilo do subtítulo claro sobre o fundo escuro do hero */
+.hero-sub--light {
+  color: rgba(248, 245, 238, 0.88); /* cor do texto */
+  max-width: 520px; /* largura máxima */
+  margin: 0 auto; /* centraliza na página */
+  font-size: 17px; /* tamanho da letra */
+}
+
+/* Linha com os botões de ação do hero, centralizados e com espaçamento */
+.hero-actions {
+  display: flex; /* organiza os filhos em linha (flex) */
+  justify-content: center; /* centraliza na horizontal */
+  gap: 16px; /* espaço entre os filhos */
+  margin-top: 36px; /* espaço por fora em cima */
+  flex-wrap: wrap; /* quebra para a linha de baixo se faltar espaço */
+}
+
+/* Estilo base das pétalas decorativas grandes espalhadas pelo hero */
+.hero-petal {
+  position: absolute; /* posição livre dentro do pai */
+  z-index: 1; /* ordem de camada (maior fica por cima) */
+  color: rgba(248, 245, 238, 0.18); /* cor do texto */
+  font-size: 120px; /* tamanho da letra */
+  pointer-events: none; /* mouse não interage com ele */
+  animation: floatPetal 9s ease-in-out infinite; /* animação usada */
+}
+
+/* Posição e tamanho individuais de cada uma das quatro pétalas do hero */
+.hero-petal--1 { top: 12%; left: 8%; animation-delay: 0s; } /* pétala 1: canto de cima à esquerda */
+.hero-petal--2 { bottom: 10%; right: 8%; font-size: 90px; animation-delay: 2.5s; } /* pétala 2: canto de baixo à direita */
+.hero-petal--3 { top: 60%; left: 18%; font-size: 46px; animation-delay: 1.2s; } /* pétala 3: meio à esquerda */
+.hero-petal--4 { top: 24%; right: 20%; font-size: 60px; animation-delay: 3.6s; } /* pétala 4: em cima à direita */
+
+/* Animação de flutuação suave usada pelas pétalas decorativas */
+@keyframes floatPetal {
+  0%, 100% { transform: translateY(0) rotate(0deg); } /* começo e fim da animação */
+  50% { transform: translateY(-18px) rotate(12deg); } /* meio da animação */
+}
+
+/* --- Hero heading: word-by-word reveal --- */
+/* Cada palavra do título, escondida e deslocada antes de ser revelada */
+.split-words .word {
+  display: inline-block; /* fica na linha, mas aceita tamanho */
+  opacity: 0; /* invisível */
+  transform: translateY(100%) rotate(3deg); /* move/gira/aumenta o elemento */
+  animation: wordUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; /* animação usada */
+  animation-delay: calc(var(--i) * 0.06s); /* espera antes de animar */
+}
+
+/* Espaço em branco entre palavras, tratado como bloco para manter o alinhamento */
+.split-words .space { display: inline-block; width: 0.28em; } /* espaço entre palavras */
+
+/* Animação de subida e acomodação de cada palavra do título */
+@keyframes wordUp {
+  to { opacity: 1; transform: translateY(0) rotate(0deg); } /* fim da animação */
+}
+
+/* --- Buttons --- */
+/* Estilo base compartilhado por todos os botões do site (formato de pílula) */
+.btn {
+  display: inline-flex; /* flex, mas fica na linha do texto */
+  align-items: center; /* centraliza na vertical */
+  justify-content: center; /* centraliza na horizontal */
+  padding: 15px 30px; /* espaço por dentro */
+  border-radius: 999px; /* formato de pílula/círculo */
+  font-family: var(--font-body); /* tipo de fonte */
+  font-size: 14px; /* tamanho da letra */
+  font-weight: 600; /* grossura da letra */
+  letter-spacing: 0.02em; /* espaço entre as letras */
+  text-decoration: none; /* tira o sublinhado */
+  cursor: pointer; /* mostra a mãozinha */
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease; /* deixa a mudança suave */
+}
+
+/* Variante de botão primário (preenchido), usado nas chamadas principais */
+.btn--primary {
+  background: var(--brass); /* cor/fundo */
+  color: var(--white); /* cor do texto */
+  box-shadow: 0 14px 30px -12px rgba(46, 128, 121, 0.55); /* sombra */
+}
+
+/* Efeito de elevação e escurecimento do botão primário ao passar o mouse */
+.btn--primary:hover {
+  background: #256b64; /* cor/fundo */
+  transform: translateY(-3px) scale(1.02); /* move/gira/aumenta o elemento */
+  box-shadow: 0 20px 36px -12px rgba(46, 128, 121, 0.65); /* sombra */
+}
+
+/* Variante de botão secundário (contorno), usado em ações menos importantes */
+.btn--ghost {
+  background: transparent; /* fundo transparente */
+  color: var(--white); /* cor do texto */
+  border: 1.5px solid rgba(248, 245, 238, 0.6); /* borda */
+}
+
+/* Efeito de preenchimento leve e elevação do botão secundário ao passar o mouse */
+.btn--ghost:hover {
+  background: rgba(248, 245, 238, 0.12); /* cor/fundo */
+  border-color: var(--white); /* cor da borda */
+  transform: translateY(-3px); /* move/gira/aumenta o elemento */
+}
+
+/* Variante de botão maior, usada na chamada final da página */
+.btn--lg { padding: 18px 38px; font-size: 15px; } /* botão maior */
+
+/* --- Scroll cue --- */
+/* Indicador em formato de cápsula convidando o usuário a rolar a página */
+.scroll-cue {
+  position: absolute; /* posição livre dentro do pai */
+  bottom: 32px; /* distância de baixo */
+  left: 50%; /* distância da esquerda */
+  transform: translateX(-50%); /* move/gira/aumenta o elemento */
+  z-index: 2; /* ordem de camada (maior fica por cima) */
+  width: 26px; /* largura */
+  height: 42px; /* altura */
+  border: 1.5px solid rgba(248, 245, 238, 0.7); /* borda */
+  border-radius: 999px; /* formato de pílula/círculo */
+  display: flex; /* organiza os filhos em linha (flex) */
+  justify-content: center; /* centraliza na horizontal */
+  padding-top: 8px; /* espaço por dentro em cima */
+}
+
+/* Bolinha animada dentro do indicador, descendo em loop */
+.scroll-cue span {
+  width: 4px; /* largura */
+  height: 8px; /* altura */
+  border-radius: 999px; /* formato de pílula/círculo */
+  background: var(--white); /* cor/fundo */
+  animation: scrollCue 1.8s ease-in-out infinite; /* animação usada */
+}
+
+/* Trajetória da bolinha: desce e desaparece, repetindo o ciclo */
+@keyframes scrollCue {
+  0% { opacity: 1; transform: translateY(0); } /* começo da animação */
+  100% { opacity: 0; transform: translateY(14px); } /* fim da animação */
+}
+
+/* --- Reveal on scroll --- */
+/* Estado inicial (escondido e deslocado) de qualquer elemento com animação de entrada ao rolar */
+.reveal {
+  opacity: 0; /* invisível */
+  transform: translateY(28px); /* move/gira/aumenta o elemento */
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); /* deixa a mudança suave */
+}
+
+/* Exceção: o conteúdo do hero já aparece visível imediatamente, sem esperar o scroll */
+.hero-content.reveal { opacity: 1; transform: none; } /* já aparece visível */
+
+/* Estado final (visível) aplicado via JS quando o elemento entra na tela */
+.reveal--visible {
+  opacity: 1; /* visível */
+  transform: none; /* sem mover/girar */
+}
+
+/* --- Sections --- */
+/* Largura máxima e espaçamento vertical padrão de cada seção da home */
+.section {
+  max-width: 1080px; /* largura máxima */
+  margin: 0 auto; /* centraliza na página */
+  padding: 100px 24px; /* espaço por dentro */
+}
+
+/* Bloco de introdução centralizado no topo de cada seção (rótulo + título + texto) */
+.section-inner { text-align: center; max-width: 640px; margin: 0 auto 48px; } /* centraliza o título da seção */
+
+/* Estilo padrão dos títulos de seção */
+.section h2 {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-weight: 500; /* grossura da letra */
+  font-size: clamp(28px, 4vw, 40px); /* tamanho da letra */
+  color: var(--garden); /* cor do texto */
+  margin: 0 0 16px; /* espaço por fora */
+  line-height: 1.15; /* altura da linha de texto */
+}
+
+/* Estilo do parágrafo de apoio (texto de introdução) das seções */
+.lede { font-size: 16px; color: var(--ink-soft); line-height: 1.6; } /* texto de apoio cinza */
+
+/* Quebra de linha que só aparece em telas largas (desktop) */
+.br-desktop { display: inline; } /* quebra de linha no PC */
+/* Remove a quebra de linha forçada em telas estreitas, deixando o texto fluir naturalmente */
+@media (max-width: 640px) { .br-desktop { display: none; } } /* no celular tira a quebra */
+
+/* --- Stats --- */
+/* Linha com os números em destaque da seção "Sobre", centralizados e espaçados */
+.stats {
+  display: flex; /* organiza os filhos em linha (flex) */
+  justify-content: center; /* centraliza na horizontal */
+  gap: 64px; /* espaço entre os filhos */
+  flex-wrap: wrap; /* quebra para a linha de baixo se faltar espaço */
+  margin-top: 8px; /* espaço por fora em cima */
+}
+
+/* Bloco individual de cada estatística (número + rótulo) */
+.stat { text-align: center; } /* número centralizado */
+
+/* Número grande em destaque de cada estatística */
+.stat-num {
+  display: block; /* ocupa a linha toda */
+  font-family: var(--font-display); /* tipo de fonte */
+  font-size: 44px; /* tamanho da letra */
+  font-weight: 500; /* grossura da letra */
+  color: var(--brass); /* cor do texto */
+}
+
+/* Rótulo pequeno abaixo do número de cada estatística */
+.stat-label {
+  display: block; /* ocupa a linha toda */
+  font-size: 13px; /* tamanho da letra */
+  color: var(--ink-soft); /* cor do texto */
+  margin-top: 4px; /* espaço por fora em cima */
+}
+
+/* --- Espaços: Garden & Villa ---
+   Layout simples e à prova de falhas: cada foto é uma <img> normal,
+   sempre visível, sem nenhuma opacidade condicionada a JavaScript. */
+/* Grade lado a lado com os cards do Garden e da Villa */
+.space-grid {
+  display: grid; /* organiza os filhos em grade */
+  grid-template-columns: 1fr 1fr; /* duas colunas iguais */
+  gap: 32px; /* espaço entre os filhos */
+}
+
+/* Cartão de cada espaço, com borda e leve elevação ao passar o mouse */
+.space-card {
+  border-radius: 6px; /* arredonda os cantos */
+  overflow: hidden; /* esconde o que passar da caixa */
+  background: var(--paper); /* cor/fundo */
+  border: 1px solid var(--line); /* borda */
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease; /* deixa a mudança suave */
+}
+
+/* Eleva o card e intensifica a sombra ao passar o mouse */
+.space-card:hover {
+  transform: translateY(-6px); /* move/gira/aumenta o elemento */
+  box-shadow: 0 30px 50px -24px rgba(27, 58, 92, 0.3); /* sombra */
+}
+
+/* Área da foto do card, com proporção fixa e recorte das bordas */
+.space-media {
+  aspect-ratio: 4 / 3; /* proporção largura/altura */
+  overflow: hidden; /* esconde o que passar da caixa */
+}
+
+/* Imagem do card, preenchendo toda a área e com leve zoom ao passar o mouse */
+.space-media img {
+  width: 100%; /* largura toda */
+  height: 100%; /* altura toda */
+  object-fit: cover; /* imagem cobre a área sem distorcer */
+  display: block; /* ocupa a linha toda */
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); /* deixa a mudança suave */
+}
+
+/* Aumenta levemente a imagem quando o mouse passa sobre o card */
+.space-card:hover .space-media img { transform: scale(1.08); } /* foto dá zoom */
+
+/* Área de texto do card, abaixo da foto */
+.space-info { padding: 28px 28px 32px; } /* espaço interno do texto */
+
+/* Título (nome do espaço) dentro do card */
+.space-info h3 {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-size: 24px; /* tamanho da letra */
+  font-weight: 500; /* grossura da letra */
+  color: var(--garden); /* cor do texto */
+  margin: 0 0 10px; /* espaço por fora */
+}
+
+/* Texto descritivo dentro do card */
+.space-info p {
+  font-size: 14px; /* tamanho da letra */
+  color: var(--ink-soft); /* cor do texto */
+  line-height: 1.6; /* altura da linha de texto */
+  margin: 0 0 18px; /* espaço por fora */
+}
+
+/* Em telas estreitas, empilha os cards de espaço em uma única coluna */
+@media (max-width: 760px) {
+  .space-grid { grid-template-columns: 1fr; } /* 1 coluna no celular */
+}
+
+/* Estilo dos links com seta (ex: "Ver detalhes completos") */
+.link-arrow {
+  font-size: 13px; /* tamanho da letra */
+  font-weight: 600; /* grossura da letra */
+  color: var(--brass); /* cor do texto */
+  text-decoration: none; /* tira o sublinhado */
+  display: inline-block; /* fica na linha, mas aceita tamanho */
+  transition: transform 0.2s ease, color 0.2s ease; /* deixa a mudança suave */
+}
+
+/* Desloca o link levemente para a direita e escurece a cor ao passar o mouse */
+.link-arrow:hover { color: #205a54; transform: translateX(4px); } /* seta anda para a direita */
+
+/* --- Serviços --- */
+/* Grade com os quatro cards de serviços adicionais, em quatro colunas */
+.service-grid {
+  display: grid; /* organiza os filhos em grade */
+  grid-template-columns: repeat(4, 1fr); /* colunas da grade */
+  gap: 20px; /* espaço entre os filhos */
+}
+
+/* Em telas médias, reorganiza os cards de serviço em duas colunas */
+@media (max-width: 760px) {
+  .service-grid { grid-template-columns: 1fr 1fr; } /* 2 colunas no celular */
+}
+
+/* Cartão individual de cada serviço adicional, com entrada escalonada */
+.service-card {
+  text-align: center; /* texto centralizado */
+  padding: 32px 20px; /* espaço por dentro */
+  border-radius: 6px; /* arredonda os cantos */
+  border: 1px solid var(--line); /* borda */
+  background: var(--white); /* cor/fundo */
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger-delay, 0s); /* deixa a mudança suave */
+}
+
+/* Define um atraso de entrada diferente para cada card, criando o efeito escalonado */
+.service-grid .service-card:nth-child(1) { --stagger-delay: 0s; } /* card 1 sem espera */
+.service-grid .service-card:nth-child(2) { --stagger-delay: 0.1s; } /* card 2 espera 0,1s */
+.service-grid .service-card:nth-child(3) { --stagger-delay: 0.2s; } /* card 3 espera 0,2s */
+.service-grid .service-card:nth-child(4) { --stagger-delay: 0.3s; } /* card 4 espera 0,3s */
+
+/* Eleva o card e destaca a borda ao passar o mouse */
+.service-card:hover {
+  transform: translateY(-6px); /* move/gira/aumenta o elemento */
+  border-color: var(--brass); /* cor da borda */
+  box-shadow: 0 20px 36px -18px rgba(27, 58, 92, 0.28); /* sombra */
+}
+
+/* Ícone (emoji) de cada serviço, centralizado no topo do card */
+.service-icon {
+  display: block; /* ocupa a linha toda */
+  font-size: 34px; /* tamanho da letra */
+  margin-bottom: 14px; /* espaço por fora embaixo */
+  transition: transform 0.3s ease; /* deixa a mudança suave */
+}
+
+/* Aumenta e gira levemente o ícone ao passar o mouse sobre o card */
+.service-card:hover .service-icon { transform: scale(1.15) rotate(-6deg); } /* ícone cresce e gira */
+
+/* Título (nome do serviço) dentro do card */
+.service-card h3 {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-size: 17px; /* tamanho da letra */
+  font-weight: 500; /* grossura da letra */
+  color: var(--garden); /* cor do texto */
+  margin: 0 0 8px; /* espaço por fora */
+}
+
+/* Texto descritivo curto dentro do card de serviço */
+.service-card p {
+  font-size: 13px; /* tamanho da letra */
+  color: var(--ink-soft); /* cor do texto */
+  margin: 0; /* sem espaço por fora */
+  line-height: 1.5; /* altura da linha de texto */
+}
+
+/* --- Galeria --- */
+/* Grade tipo mosaico com as miniaturas da prévia da galeria, na home */
+.gallery-grid {
+  display: grid; /* organiza os filhos em grade */
+  grid-template-columns: repeat(4, 1fr); /* colunas da grade */
+  grid-auto-rows: 160px; /* altura das linhas da grade */
+  gap: 14px; /* espaço entre os filhos */
+}
+
+/* Espaçamento acima do link "Ver galeria completa" */
+.gallery-cta {
+  text-align: center; /* texto centralizado */
+  margin-top: 32px; /* espaço por fora em cima */
+}
+
+/* Cada miniatura clicável da galeria, com animação de revelar de baixo para cima */
+.gallery-item {
+  position: relative; /* serve de referência para filhos posicionados */
+  border-radius: 6px; /* arredonda os cantos */
+  overflow: hidden; /* esconde o que passar da caixa */
+  grid-column: span 1; /* quantas colunas ocupa */
+  grid-row: span 1; /* quantas linhas ocupa */
+  border: none; /* sem borda */
+  padding: 0; /* sem espaço por dentro */
+  margin: 0; /* sem espaço por fora */
+  background: none; /* sem fundo */
+  font: inherit; /* usa a mesma fonte do pai */
+  text-align: left; /* texto à esquerda */
+  display: block; /* ocupa a linha toda */
+  cursor: pointer; /* mostra a mãozinha */
+  clip-path: inset(0 0 100% 0); /* recorta a parte visível */
+  transition: clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1); /* deixa a mudança suave */
+}
+
+/* Escalona o atraso da animação de revelar entre as quatro miniaturas */
+.gallery-grid .gallery-item:nth-child(1) { transition-delay: 0s; } /* foto 1 sem espera */
+.gallery-grid .gallery-item:nth-child(2) { transition-delay: 0.12s; } /* foto 2 espera 0,12s */
+.gallery-grid .gallery-item:nth-child(3) { transition-delay: 0.24s; } /* foto 3 espera 0,24s */
+.gallery-grid .gallery-item:nth-child(4) { transition-delay: 0.36s; } /* foto 4 espera 0,36s */
+
+/* Revela a miniatura por completo quando ela entra na área visível */
+.gallery-item.reveal--visible { clip-path: inset(0 0 0% 0); } /* foto aparece inteira */
+
+/* Miniatura que ocupa duas linhas da grade (mais alta) */
+.gallery-item--tall { grid-row: span 2; } /* ocupa 2 linhas */
+/* Miniatura que ocupa duas colunas da grade (mais larga) */
+.gallery-item--wide { grid-column: span 2; } /* ocupa 2 colunas */
+
+/* Imagem dentro da miniatura, preenchendo toda a área do botão */
+.gallery-item img {
+  width: 100%; /* largura toda */
+  height: 100%; /* altura toda */
+  object-fit: cover; /* imagem cobre a área sem distorcer */
+  display: block; /* ocupa a linha toda */
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease; /* deixa a mudança suave */
+}
+
+/* Aumenta e escurece levemente a imagem ao passar o mouse */
+.gallery-item:hover img {
+  transform: scale(1.08); /* move/gira/aumenta o elemento */
+  filter: brightness(0.85); /* filtro na imagem (brilho) */
+}
+
+/* Ícone de "+" (zoom) sobreposto à imagem, escondido por padrão */
+.gallery-zoom {
+  position: absolute; /* posição livre dentro do pai */
+  inset: 0; /* gruda nos 4 lados (tela/caixa inteira) */
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  justify-content: center; /* centraliza na horizontal */
+  font-size: 30px; /* tamanho da letra */
+  color: var(--white); /* cor do texto */
+  opacity: 0; /* invisível */
+  background: rgba(15, 34, 54, 0.15); /* cor/fundo */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* deixa a mudança suave */
+  transform: scale(0.7); /* move/gira/aumenta o elemento */
+}
+
+/* Revela e amplia o ícone de zoom ao passar o mouse sobre a miniatura */
+.gallery-item:hover .gallery-zoom {
+  opacity: 1; /* visível */
+  transform: scale(1); /* move/gira/aumenta o elemento */
+}
+
+/* --- Página Espaços: descrição + carrossel --- */
+/* Bloco de duas colunas usado na página de espaços: texto de um lado, carrossel do outro */
+.space-detail {
+  max-width: 1180px; /* largura máxima */
+  margin: 0 auto; /* centraliza na página */
+  padding: 90px 24px; /* espaço por dentro */
+  display: grid; /* organiza os filhos em grade */
+  grid-template-columns: 0.85fr 1.15fr; /* colunas da grade */
+  gap: 56px; /* espaço entre os filhos */
+  align-items: center; /* centraliza na vertical */
+}
+
+/* Inverte a ordem visual das colunas (usado para alternar texto/carrossel entre seções) */
+.space-detail--reverse { direction: rtl; } /* inverte a ordem das colunas */
+/* Corrige a direção do texto interno, já que só a ordem das colunas deveria inverter */
+.space-detail--reverse > * { direction: ltr; } /* texto volta ao normal */
+
+/* Título de cada bloco de detalhe de espaço */
+.space-detail-info h2 {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-weight: 500; /* grossura da letra */
+  font-size: clamp(28px, 3.4vw, 38px); /* tamanho da letra */
+  color: var(--garden); /* cor do texto */
+  margin: 0 0 18px; /* espaço por fora */
+  line-height: 1.15; /* altura da linha de texto */
+}
+
+/* Lista de comodidades/diferenciais do espaço, sem marcadores padrão */
+.amenity-list {
+  list-style: none; /* tira as bolinhas da lista */
+  margin: 24px 0 32px; /* espaço por fora */
+  padding: 0; /* sem espaço por dentro */
+  display: flex; /* organiza os filhos em linha (flex) */
+  flex-direction: column; /* filhos um embaixo do outro */
+  gap: 12px; /* espaço entre os filhos */
+}
+
+/* Cada item da lista de comodidades, com espaço reservado para o marcador customizado */
+.amenity-list li {
+  font-size: 14px; /* tamanho da letra */
+  color: var(--ink); /* cor do texto */
+  padding-left: 26px; /* espaço por dentro à esquerda */
+  position: relative; /* serve de referência para filhos posicionados */
+}
+
+/* Marcador customizado (florzinha) antes de cada item da lista de comodidades */
+.amenity-list li::before {
+  content: "✿"; /* conteúdo do pseudo-elemento */
+  position: absolute; /* posição livre dentro do pai */
+  left: 0; /* distância da esquerda */
+  top: -1px; /* distância do topo */
+  color: var(--brass); /* cor do texto */
+  font-size: 13px; /* tamanho da letra */
+}
+
+/* Em telas estreitas, empilha o texto e o carrossel em uma única coluna */
+@media (max-width: 860px) {
+  .space-detail { grid-template-columns: 1fr; } /* 1 coluna no celular */
+}
+
+/* --- Carrossel --- */
+/* Contêiner posicionado do carrossel de fotos de cada espaço */
+.carousel {
+  position: relative; /* serve de referência para filhos posicionados */
+}
+
+/* Janela visível do carrossel, recortando os slides fora de vista */
+.carousel-viewport {
+  overflow: hidden; /* esconde o que passar da caixa */
+  border-radius: 6px; /* arredonda os cantos */
+  aspect-ratio: 4 / 3; /* proporção largura/altura */
+  box-shadow: 0 30px 60px -28px rgba(27, 58, 92, 0.35); /* sombra */
+}
+
+/* Trilho que contém todos os slides lado a lado e se desloca horizontalmente */
+.carousel-track {
+  display: flex; /* organiza os filhos em linha (flex) */
+  height: 100%; /* altura toda */
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1); /* deixa a mudança suave */
+}
+
+/* Cada slide individual, ocupando toda a largura da janela do carrossel */
+.carousel-slide {
+  flex: 0 0 100%; /* tamanho fixo dentro do flex */
+  height: 100%; /* altura toda */
+}
+
+/* Imagem de cada slide, preenchendo toda a área do slide */
+.carousel-slide img {
+  width: 100%; /* largura toda */
+  height: 100%; /* altura toda */
+  object-fit: cover; /* imagem cobre a área sem distorcer */
+  display: block; /* ocupa a linha toda */
+}
+
+/* Botão circular de navegação (seta) do carrossel, centralizado verticalmente */
+.carousel-arrow {
+  position: absolute; /* posição livre dentro do pai */
+  top: 50%; /* distância do topo */
+  transform: translateY(-50%); /* move/gira/aumenta o elemento */
+  width: 44px; /* largura */
+  height: 44px; /* altura */
+  border-radius: 999px; /* formato de pílula/círculo */
+  border: none; /* sem borda */
+  background: rgba(248, 245, 238, 0.92); /* cor/fundo */
+  color: var(--garden); /* cor do texto */
+  font-size: 16px; /* tamanho da letra */
+  cursor: pointer; /* mostra a mãozinha */
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  justify-content: center; /* centraliza na horizontal */
+  box-shadow: 0 10px 24px -8px rgba(27, 58, 92, 0.4); /* sombra */
+  transition: background 0.2s ease, transform 0.2s ease; /* deixa a mudança suave */
+}
+
+/* Inverte as cores e amplia a seta do carrossel ao passar o mouse */
+.carousel-arrow:hover {
+  background: var(--garden); /* cor/fundo */
+  color: var(--white); /* cor do texto */
+  transform: translateY(-50%) scale(1.08); /* move/gira/aumenta o elemento */
+}
+
+/* Posiciona a seta de slide anterior à esquerda */
+.carousel-arrow--prev { left: 14px; } /* seta da esquerda */
+/* Posiciona a seta de próximo slide à direita */
+.carousel-arrow--next { right: 14px; } /* seta da direita */
+
+/* Linha de bolinhas indicadoras (dots) abaixo do carrossel */
+.carousel-dots {
+  display: flex; /* organiza os filhos em linha (flex) */
+  justify-content: center; /* centraliza na horizontal */
+  gap: 8px; /* espaço entre os filhos */
+  margin-top: 16px; /* espaço por fora em cima */
+}
+
+/* Bolinha indicadora de cada slide do carrossel */
+.carousel-dot {
+  width: 7px; /* largura */
+  height: 7px; /* altura */
+  border-radius: 999px; /* formato de pílula/círculo */
+  border: none; /* sem borda */
+  background: var(--line); /* cor/fundo */
+  cursor: pointer; /* mostra a mãozinha */
+  padding: 0; /* sem espaço por dentro */
+  transition: background 0.25s ease, transform 0.25s ease; /* deixa a mudança suave */
+}
+
+/* Destaca a bolinha correspondente ao slide atualmente exibido */
+.carousel-dot--active {
+  background: var(--brass); /* cor/fundo */
+  transform: scale(1.35); /* move/gira/aumenta o elemento */
+}
+
+/* --- Serviços adicionais (página Espaços) --- */
+/* Grade de dois cards por linha com os serviços adicionais detalhados */
+.service-detail-grid {
+  display: grid; /* organiza os filhos em grade */
+  grid-template-columns: repeat(2, 1fr); /* colunas da grade */
+  gap: 28px; /* espaço entre os filhos */
+  max-width: 900px; /* largura máxima */
+  margin: 0 auto; /* centraliza na página */
+}
+
+/* Cartão horizontal de cada serviço adicional (ícone/placeholder + texto) */
+.service-detail-card {
+  display: flex; /* organiza os filhos em linha (flex) */
+  gap: 20px; /* espaço entre os filhos */
+  align-items: center; /* centraliza na vertical */
+  padding: 20px; /* espaço por dentro */
+  border: 1px solid var(--line); /* borda */
+  border-radius: 6px; /* arredonda os cantos */
+  background: var(--white); /* cor/fundo */
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease; /* deixa a mudança suave */
+}
+
+/* Eleva o card e adiciona sombra ao passar o mouse */
+.service-detail-card:hover {
+  transform: translateY(-4px); /* move/gira/aumenta o elemento */
+  box-shadow: 0 20px 36px -20px rgba(27, 58, 92, 0.28); /* sombra */
+}
+
+/* Área quadrada tracejada que substitui uma foto real do serviço (placeholder) */
+.service-photo-placeholder {
+  flex: 0 0 96px; /* tamanho fixo dentro do flex */
+  width: 96px; /* largura */
+  height: 96px; /* altura */
+  border-radius: 6px; /* arredonda os cantos */
+  border: 1.5px dashed var(--line); /* borda */
+  background: var(--paper); /* cor/fundo */
+  display: flex; /* organiza os filhos em linha (flex) */
+  flex-direction: column; /* filhos um embaixo do outro */
+  align-items: center; /* centraliza na vertical */
+  justify-content: center; /* centraliza na horizontal */
+  gap: 4px; /* espaço entre os filhos */
+}
+
+/* Ícone (emoji) exibido dentro do placeholder de foto */
+.service-photo-icon { font-size: 28px; } /* tamanho do emoji */
+
+/* Rótulo de texto pequeno dentro do placeholder de foto */
+.service-photo-label {
+  font-family: var(--font-mono); /* tipo de fonte */
+  font-size: 9px; /* tamanho da letra */
+  letter-spacing: 0.04em; /* espaço entre as letras */
+  text-transform: uppercase; /* deixa em MAIÚSCULAS */
+  color: var(--ink-soft); /* cor do texto */
+  text-align: center; /* texto centralizado */
+}
+
+/* Título (nome do serviço) no card detalhado */
+.service-detail-info h3 {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-size: 18px; /* tamanho da letra */
+  font-weight: 500; /* grossura da letra */
+  color: var(--garden); /* cor do texto */
+  margin: 0 0 6px; /* espaço por fora */
+}
+
+/* Texto descritivo do serviço no card detalhado */
+.service-detail-info p {
+  font-size: 13px; /* tamanho da letra */
+  color: var(--ink-soft); /* cor do texto */
+  line-height: 1.5; /* altura da linha de texto */
+  margin: 0 0 8px; /* espaço por fora */
+}
+
+/* Etiqueta de preço/forma de cobrança, em formato de pílula */
+.service-price-tag {
+  display: inline-block; /* fica na linha, mas aceita tamanho */
+  font-family: var(--font-mono); /* tipo de fonte */
+  font-size: 10px; /* tamanho da letra */
+  letter-spacing: 0.04em; /* espaço entre as letras */
+  text-transform: uppercase; /* deixa em MAIÚSCULAS */
+  color: var(--brass); /* cor do texto */
+  background: var(--brass-soft); /* cor/fundo */
+  padding: 4px 10px; /* espaço por dentro */
+  border-radius: 999px; /* formato de pílula/círculo */
+}
+
+/* Em telas estreitas, empilha os cards de serviço detalhado em uma coluna */
+@media (max-width: 700px) {
+  .service-detail-grid { grid-template-columns: 1fr; } /* 1 coluna no celular */
+}
+
+/* --- Página de galeria completa (masonry) --- */
+/* Layout tipo "mosaico" (masonry) em colunas fluidas para a galeria completa */
+.gallery-page {
+  columns: 3 260px; /* número/largura das colunas */
+  column-gap: 18px; /* espaço entre as colunas */
+  max-width: 1180px; /* largura máxima */
+  margin: 48px auto 0; /* espaço por fora */
+  padding: 0 24px; /* espaço por dentro */
+}
+
+/* Cada item da galeria masonry, evitando ser cortado entre colunas */
+.gallery-page-item {
+  display: block; /* ocupa a linha toda */
+  width: 100%; /* largura toda */
+  break-inside: avoid; /* não corta o item entre colunas */
+  margin-bottom: 18px; /* espaço por fora embaixo */
+  border-radius: 6px; /* arredonda os cantos */
+  overflow: hidden; /* esconde o que passar da caixa */
+  position: relative; /* serve de referência para filhos posicionados */
+  border: none; /* sem borda */
+  padding: 0; /* sem espaço por dentro */
+  background: none; /* sem fundo */
+  cursor: pointer; /* mostra a mãozinha */
+}
+
+/* Imagem de cada item da galeria masonry, com zoom suave ao passar o mouse */
+.gallery-page-item img {
+  width: 100%; /* largura toda */
+  display: block; /* ocupa a linha toda */
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease; /* deixa a mudança suave */
+}
+
+/* Aumenta e escurece levemente a imagem ao passar o mouse */
+.gallery-page-item:hover img {
+  transform: scale(1.06); /* move/gira/aumenta o elemento */
+  filter: brightness(0.85); /* filtro na imagem (brilho) */
+}
+
+/* Escalona o atraso de transição conforme a posição do item nas três colunas */
+.gallery-page-item:nth-child(3n+1) { transition-delay: 0s; } /* coluna 1 sem espera */
+.gallery-page-item:nth-child(3n+2) { transition-delay: 0.1s; } /* coluna 2 espera 0,1s */
+.gallery-page-item:nth-child(3n+3) { transition-delay: 0.2s; } /* coluna 3 espera 0,2s */
+
+/* Em telas estreitas, usa apenas uma coluna no mosaico */
+@media (max-width: 700px) {
+  .gallery-page { columns: 1; } /* 1 coluna no celular */
+}
+
+/* --- Lightbox --- */
+/* Camada de tela cheia escurecida que exibe a foto ampliada, escondida por padrão */
+.lightbox {
+  position: fixed; /* fica preso na tela ao rolar */
+  inset: 0; /* gruda nos 4 lados (tela/caixa inteira) */
+  z-index: 300; /* ordem de camada (maior fica por cima) */
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  justify-content: center; /* centraliza na horizontal */
+  padding: 40px; /* espaço por dentro */
+  background: rgba(15, 34, 54, 0.9); /* cor/fundo */
+  opacity: 0; /* invisível */
+  visibility: hidden; /* escondido */
+  transition: opacity 0.35s ease, visibility 0.35s ease; /* deixa a mudança suave */
+}
+
+/* Torna o lightbox visível e interativo quando aberto */
+.lightbox--open { opacity: 1; visibility: visible; } /* mostra o lightbox */
+
+/* Imagem ampliada dentro do lightbox, com leve efeito de escala na abertura */
+.lightbox img {
+  max-width: 100%; /* largura máxima */
+  max-height: 100%; /* altura máxima */
+  border-radius: 4px; /* arredonda os cantos */
+  transform: scale(0.9); /* move/gira/aumenta o elemento */
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); /* deixa a mudança suave */
+  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6); /* sombra */
+}
+
+/* Restaura a escala normal da imagem quando o lightbox está aberto */
+.lightbox--open img { transform: scale(1); } /* foto em tamanho normal */
+
+/* Botão "X" de fechar o lightbox, no canto superior direito */
+.lightbox-close {
+  position: absolute; /* posição livre dentro do pai */
+  top: 24px; /* distância do topo */
+  right: 32px; /* distância da direita */
+  background: none; /* sem fundo */
+  border: none; /* sem borda */
+  color: var(--white); /* cor do texto */
+  font-size: 36px; /* tamanho da letra */
+  line-height: 1; /* altura da linha de texto */
+  cursor: pointer; /* mostra a mãozinha */
+  transition: transform 0.2s ease; /* deixa a mudança suave */
+}
+
+/* Gira o botão de fechar ao passar o mouse, como um pequeno efeito lúdico */
+.lightbox-close:hover { transform: rotate(90deg); } /* X gira */
+
+/* Ajustes da grade de galeria e das miniaturas especiais em telas estreitas */
+@media (max-width: 760px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 140px; } /* 2 colunas, linhas menores */
+  .gallery-item--wide { grid-column: span 2; } /* larga ocupa 2 colunas */
+  .gallery-item--tall { grid-row: span 2; } /* alta ocupa 2 linhas */
+}
+
+/* --- CTA banner --- */
+/* Faixa de chamada final para ação, com fundo escuro e destaque no centro */
+.cta-banner {
+  position: relative; /* serve de referência para filhos posicionados */
+  overflow: hidden; /* esconde o que passar da caixa */
+  text-align: center; /* texto centralizado */
+  background: var(--garden); /* cor/fundo */
+  color: var(--white); /* cor do texto */
+  padding: 100px 24px; /* espaço por dentro */
+  margin: 0; /* sem espaço por fora */
+}
+
+/* Título em destaque dentro da faixa de CTA */
+.cta-banner h2 {
+  font-family: var(--font-display); /* tipo de fonte */
+  font-weight: 500; /* grossura da letra */
+  font-size: clamp(28px, 4vw, 40px); /* tamanho da letra */
+  color: var(--white); /* cor do texto */
+  max-width: 560px; /* largura máxima */
+  margin: 0 auto 36px; /* espaço por fora */
+  line-height: 1.2; /* altura da linha de texto */
+}
+
+/* Pétala decorativa gigante e sutil no fundo da faixa de CTA */
+.cta-petal {
+  position: absolute; /* posição livre dentro do pai */
+  color: rgba(248, 245, 238, 0.08); /* cor do texto */
+  font-size: 240px; /* tamanho da letra */
+  top: -60px; /* distância do topo */
+  right: -40px; /* distância da direita */
+  pointer-events: none; /* mouse não interage com ele */
+  animation: floatPetal 12s ease-in-out infinite; /* animação usada */
+}
+
+/* --- Footer --- */
+/* Rodapé do site, com fundo bem escuro e conteúdo centralizado em coluna */
+.site-footer {
+  background: #0F2236; /* cor/fundo */
+  color: rgba(248, 245, 238, 0.75); /* cor do texto */
+  padding: 56px 24px 32px; /* espaço por dentro */
+  display: flex; /* organiza os filhos em linha (flex) */
+  flex-direction: column; /* filhos um embaixo do outro */
+  align-items: center; /* centraliza na vertical */
+  gap: 20px; /* espaço entre os filhos */
+  text-align: center; /* texto centralizado */
+}
+
+/* Bloco com o ícone e o nome da marca no rodapé */
+.footer-brand {
+  display: flex; /* organiza os filhos em linha (flex) */
+  align-items: center; /* centraliza na vertical */
+  gap: 10px; /* espaço entre os filhos */
+  color: var(--white); /* cor do texto */
+  font-family: var(--font-display); /* tipo de fonte */
+  font-size: 18px; /* tamanho da letra */
+}
+
+/* Espaçamento entre as linhas de informação de contato no rodapé */
+.footer-info p { margin: 4px 0; font-size: 13px; } /* linhas de contato */
+
+/* Linha de links de navegação repetidos no rodapé */
+.footer-links {
+  display: flex; /* organiza os filhos em linha (flex) */
+  gap: 24px; /* espaço entre os filhos */
+  flex-wrap: wrap; /* quebra para a linha de baixo se faltar espaço */
+  justify-content: center; /* centraliza na horizontal */
+}
+
+/* Estilo de cada link do rodapé */
+.footer-links a {
+  color: rgba(248, 245, 238, 0.75); /* cor do texto */
+  text-decoration: none; /* tira o sublinhado */
+  font-size: 13px; /* tamanho da letra */
+  transition: color 0.2s ease; /* deixa a mudança suave */
+}
+
+/* Destaca o link do rodapé ao passar o mouse */
+.footer-links a:hover { color: var(--brass-soft); } /* link fica verde */
+
+/* Linha de copyright, em fonte monoespaçada e discreta */
+.footer-copy {
+  font-family: var(--font-mono); /* tipo de fonte */
+  font-size: 11px; /* tamanho da letra */
+  letter-spacing: 0.04em; /* espaço entre as letras */
+  color: rgba(248, 245, 238, 0.45); /* cor do texto */
+  margin: 12px 0 0; /* espaço por fora */
+}
+
+/* --- Responsive nav --- */
+/* Em telas estreitas, transforma a navbar em versão compacta com menu lateral deslizante */
+@media (max-width: 860px) {
+  .navbar { padding: 18px 20px; } /* menos espaço no topo */
+  .navbar--scrolled { padding: 12px 20px; } /* menos espaço ao rolar */
+  .nav-toggle { display: flex; } /* mostra o botão hambúrguer */
+
+  .nav-links {
+    position: fixed; /* fica preso na tela ao rolar */
+    top: 0; /* distância do topo */
+    right: 0; /* distância da direita */
+    height: 100vh; /* altura */
+    width: min(78vw, 320px); /* largura */
+    background: var(--garden); /* cor/fundo */
+    flex-direction: column; /* filhos um embaixo do outro */
+    align-items: flex-start; /* alinha no começo */
+    justify-content: center; /* centraliza na horizontal */
+    gap: 28px; /* espaço entre os filhos */
+    padding: 40px; /* espaço por dentro */
+    transform: translateX(100%); /* move/gira/aumenta o elemento */
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); /* deixa a mudança suave */
+  }
+
+  .nav-links--open { transform: translateX(0); } /* menu aberto entra na tela */
+
+  .nav-links a { color: var(--white) !important; font-size: 17px; } /* links brancos e maiores */
+  .nav-cta { align-self: flex-start; } /* botão alinhado à esquerda */
+}

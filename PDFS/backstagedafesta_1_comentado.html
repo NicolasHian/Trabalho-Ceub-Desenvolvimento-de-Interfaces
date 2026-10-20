@@ -1,0 +1,903 @@
+<!doctype html>
+<!-- Declara que este documento usa HTML5 -->
+<html lang="pt-BR">
+<!-- Abre a tag raiz do HTML e define o idioma como português do Brasil (ajuda leitores de tela e o Google) -->
+<head>
+<!-- Início da seção "head": metadados que não aparecem na tela, mas configuram a página -->
+<meta charset="UTF-8">
+<!-- Define a codificação de caracteres como UTF-8, para acentos e caracteres especiais funcionarem -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Faz a página se ajustar à largura da tela do dispositivo (essencial para responsividade em celular) -->
+<title>Backstage da Festa</title>
+<!-- Título que aparece na aba do navegador -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- Avisa o navegador para já abrir conexão com o Google Fonts antes de precisar, deixando o carregamento mais rápido -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Mesma ideia acima, mas para o domínio que efetivamente hospeda os arquivos de fonte -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Importa três fontes do Google Fonts: Fraunces (títulos), Work Sans (texto normal) e IBM Plex Mono (números/monoespaçada) -->
+<style>
+  /* Início do bloco de CSS (estilo visual da página) */
+
+  :root {
+    /* :root é o elemento HTML como um todo; aqui são criadas "variáveis CSS" (custom properties) reaproveitadas no resto do arquivo */
+    --bg: #F5F6F8;              /* cor de fundo da página no tema claro */
+    --surface: #FFFFFF;         /* cor de fundo dos "cards"/caixas no tema claro */
+    --surface-2: #ECEEF3;       /* uma segunda cor de superfície, um pouco mais escura, para contraste */
+    --border: #DBDFE7;          /* cor das bordas dos elementos */
+    --ink: #1C2333;             /* cor do texto principal */
+    --ink-muted: #5B6478;       /* cor de texto secundário/apagado (legendas, notas) */
+    --accent: #7A3B5E;          /* cor de destaque (roxo/vinho) usada em botões ativos, títulos etc. */
+    --accent-ink: #ffffff;      /* cor do texto quando ele fica em cima da cor de destaque */
+    --accent-soft: #F3E6EC;     /* versão bem clara da cor de destaque, para fundos suaves */
+    --gold: #B8791F;            /* cor dourada (reserva, definida mas não necessariamente usada em todo lugar) */
+    --success: #2F7D6B;         /* cor de "sucesso" (verde), usada em itens concluídos */
+    --success-soft: #E1F1EC;    /* fundo verde clarinho para destacar sucesso */
+    --warn: #A5710E;            /* cor de "atenção" (amarelo/laranja escuro) */
+    --warn-soft: #FBF1DE;       /* fundo amarelo clarinho para avisos */
+    --danger: #A93E35;          /* cor de "perigo" (vermelho), ex.: prazo atrasado */
+    --danger-soft: #FBEAE8;     /* fundo vermelho clarinho para perigo */
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 8px 24px -12px rgba(28,35,51,0.12);
+    /* sombra padrão aplicada aos cards (duas camadas de sombra sobrepostas para dar profundidade) */
+    color-scheme: light;
+    /* diz ao navegador que o esquema de cores padrão desta página é claro (afeta scrollbars, inputs nativos etc.) */
+  }
+  @media (prefers-color-scheme: dark) {
+    /* Este bloco só se aplica quando o SISTEMA OPERACIONAL do usuário está em modo escuro */
+    :root:not([data-theme="light"]) {
+      /* Mas só entra em vigor se a página não tiver sido forçada manualmente para o tema "light" via atributo data-theme */
+      --bg: #14161D;             /* fundo escuro */
+      --surface: #1C2030;        /* superfície escura dos cards */
+      --surface-2: #252A3C;      /* segunda superfície escura */
+      --border: #383E56;         /* borda no tema escuro */
+      --ink: #ECE9E2;            /* texto principal claro (para contrastar com fundo escuro) */
+      --ink-muted: #A5ABC2;      /* texto secundário claro */
+      --accent: #E29FC0;         /* cor de destaque adaptada (rosa mais claro) para tema escuro */
+      --accent-ink: #1C2030;     /* texto escuro em cima do destaque, no tema escuro */
+      --accent-soft: #3A2431;    /* fundo suave de destaque no escuro */
+      --gold: #E3B15A;           /* dourado ajustado para o escuro */
+      --success: #74C7AE;        /* verde ajustado para o escuro */
+      --success-soft: #1E362F;   /* fundo verde escuro */
+      --warn: #E3B15A;           /* amarelo ajustado para o escuro */
+      --warn-soft: #3A2E14;      /* fundo amarelo escuro */
+      --danger: #E2897C;         /* vermelho ajustado para o escuro */
+      --danger-soft: #3A211F;    /* fundo vermelho escuro */
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+      /* sombra mais forte, porque em fundo escuro sombras claras/fracas não aparecem bem */
+      color-scheme: dark;
+      /* avisa o navegador que agora o esquema é escuro */
+    }
+  }
+  :root[data-theme="dark"] {
+    /* Este bloco força o tema escuro manualmente, mesmo que o sistema operacional esteja no modo claro,
+       quando alguém define o atributo data-theme="dark" na tag <html> (ex.: um botão de alternar tema) */
+    --bg: #14161D;
+    --surface: #1C2030;
+    --surface-2: #252A3C;
+    --border: #383E56;
+    --ink: #ECE9E2;
+    --ink-muted: #A5ABC2;
+    --accent: #E29FC0;
+    --accent-ink: #1C2030;
+    --accent-soft: #3A2431;
+    --gold: #E3B15A;
+    --success: #74C7AE;
+    --success-soft: #1E362F;
+    --warn: #E3B15A;
+    --warn-soft: #3A2E14;
+    --danger: #E2897C;
+    --danger-soft: #3A211F;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    color-scheme: dark;
+    /* (mesmos valores do bloco de dark mode automático acima, repetidos para o modo forçado manualmente) */
+  }
+
+  * { box-sizing: border-box; }
+  /* Aplica a TODOS os elementos: padding e borda passam a contar dentro da largura/altura definida (evita contas confusas de tamanho) */
+  html, body { margin: 0; padding: 0; }
+  /* Remove a margem e o espaçamento padrão que o navegador coloca em html e body */
+  body {
+    background: var(--bg);           /* usa a variável de cor de fundo definida acima */
+    color: var(--ink);               /* cor do texto padrão do corpo da página */
+    font-family: 'Work Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+    /* fonte principal do texto, com alternativas (fallbacks) caso a Work Sans não carregue */
+    font-size: 15px;                 /* tamanho de fonte base */
+    line-height: 1.5;                /* espaçamento entre linhas de texto (150% do tamanho da fonte) */
+    overflow-x: hidden;              /* esconde qualquer rolagem horizontal indesejada */
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* Se o usuário configurou o sistema para reduzir animações (acessibilidade)... */
+    * { transition: none !important; animation: none !important; }
+    /* ...desativa TODAS as transições e animações CSS da página */
+  }
+
+  .wrap {
+    max-width: 920px;   /* largura máxima do conteúdo, para não esticar demais em telas grandes */
+    margin: 0 auto;      /* centraliza horizontalmente o bloco na página */
+    padding: 28px 20px 64px;  /* espaçamento interno: topo 28px, laterais 20px, base 64px */
+  }
+
+  /* ---------- header ---------- */
+  header.top {
+    display: flex;              /* transforma o header em um container flexível */
+    flex-direction: column;     /* empilha os filhos na vertical */
+    gap: 18px;                  /* espaço de 18px entre os filhos */
+    margin-bottom: 26px;        /* espaço abaixo do header inteiro */
+  }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;  /* usa a fonte monoespaçada para esse rótulo pequeno */
+    font-size: 11.5px;                        /* tamanho bem pequeno */
+    letter-spacing: 0.09em;                   /* espaçamento extra entre letras */
+    text-transform: uppercase;                /* força o texto em maiúsculas */
+    color: var(--accent);                     /* usa a cor de destaque */
+    font-weight: 500;                         /* peso da fonte (meio-negrito) */
+  }
+  h1.title {
+    font-family: 'Fraunces', Georgia, serif;  /* fonte serifada de destaque para o título principal */
+    font-weight: 600;                         /* semi-negrito */
+    font-size: clamp(28px, 5vw, 38px);        /* tamanho responsivo: nunca menor que 28px, nunca maior que 38px, e tenta 5% da largura da tela */
+    margin: 4px 0 0;                          /* margem só no topo */
+    text-wrap: balance;                       /* tenta equilibrar o texto em várias linhas de forma mais bonita */
+    letter-spacing: -0.01em;                  /* letras levemente mais próximas umas das outras */
+  }
+  .subtitle {
+    color: var(--ink-muted);   /* cor apagada para o subtítulo */
+    font-size: 14px;           /* tamanho um pouco menor que o texto padrão */
+    margin-top: 2px;           /* pequena margem no topo */
+  }
+
+  .status-row {
+    display: grid;                          /* usa grid layout para os dois cards de status */
+    grid-template-columns: 1.3fr 1fr;       /* duas colunas: a primeira um pouco mais larga que a segunda */
+    gap: 12px;                              /* espaço entre as colunas */
+  }
+  @media (max-width: 560px) {
+    /* Em telas estreitas (celular)... */
+    .status-row { grid-template-columns: 1fr; }
+    /* ...os dois cards passam a ficar em uma coluna só (empilhados) */
+  }
+  .status-card {
+    background: var(--surface);   /* fundo do card */
+    border: 1px solid var(--border);  /* borda fina */
+    border-radius: 12px;          /* cantos arredondados */
+    padding: 16px 18px;           /* espaçamento interno */
+    box-shadow: var(--shadow);    /* aplica a sombra definida nas variáveis */
+  }
+  .status-card .label {
+    font-size: 11.5px;                 /* rótulo pequeno dentro do card */
+    text-transform: uppercase;         /* maiúsculas */
+    letter-spacing: 0.07em;            /* espaçamento entre letras */
+    color: var(--ink-muted);           /* cor apagada */
+    font-weight: 600;                  /* semi-negrito */
+    margin-bottom: 8px;                /* espaço abaixo do rótulo */
+  }
+  .overall-num {
+    display: flex;                      /* alinha o número grande e o texto pequeno lado a lado */
+    align-items: baseline;              /* alinha pela linha de base do texto, ficando visualmente natural */
+    gap: 8px;                           /* espaço entre eles */
+    font-family: 'IBM Plex Mono', monospace;  /* fonte monoespaçada para números */
+    font-variant-numeric: tabular-nums; /* faz os dígitos terem sempre a mesma largura (não "pulam" ao mudar) */
+  }
+  .overall-num .big { font-size: 26px; font-weight: 500; color: var(--ink); }
+  /* número grande da porcentagem geral */
+  .overall-num .small { font-size: 13px; color: var(--ink-muted); }
+  /* texto pequeno ao lado (ex.: "3 de 10 itens") */
+  .bar-track {
+    margin-top: 10px;         /* espaço acima da barra */
+    height: 8px;               /* altura da barra de progresso (o "trilho" vazio) */
+    border-radius: 5px;        /* cantos arredondados */
+    background: var(--surface-2);  /* cor de fundo do trilho (parte não preenchida) */
+    overflow: hidden;          /* garante que o preenchimento não vaze das bordas arredondadas */
+  }
+  .bar-fill {
+    height: 100%;              /* preenche toda a altura do trilho */
+    background: var(--accent); /* cor da parte preenchida (progresso já feito) */
+    border-radius: 5px;        /* cantos arredondados */
+    transition: width 0.35s ease;  /* anima suavemente quando a largura (o progresso) muda */
+  }
+  .deadline-body { display: flex; align-items: center; gap: 12px; }
+  /* organiza o "chip" de dias restantes e o texto do prazo lado a lado, centralizados verticalmente */
+  .deadline-chip {
+    font-family: 'IBM Plex Mono', monospace;   /* fonte monoespaçada para o número de dias */
+    font-variant-numeric: tabular-nums;        /* dígitos de largura fixa */
+    font-size: 22px;                           /* tamanho grande, chama atenção */
+    font-weight: 500;                          /* peso médio */
+    border-radius: 10px;                       /* cantos arredondados, formato de "pílula/chip" */
+    padding: 6px 12px;                         /* espaçamento interno */
+    line-height: 1;                            /* linha justa, sem espaço extra vertical */
+    white-space: nowrap;                       /* não deixa o texto quebrar linha */
+  }
+  .deadline-chip.ok { background: var(--success-soft); color: var(--success); }
+  /* estilo do chip quando o prazo ainda está tranquilo (verde) */
+  .deadline-chip.warn { background: var(--warn-soft); color: var(--warn); }
+  /* estilo do chip quando o prazo está próximo (amarelo) */
+  .deadline-chip.danger { background: var(--danger-soft); color: var(--danger); }
+  /* estilo do chip quando o prazo já passou (vermelho) */
+  .deadline-text { font-size: 13.5px; color: var(--ink-muted); }
+  /* texto ao lado do chip (nome do módulo e data), em cor apagada */
+  .deadline-text b { color: var(--ink); font-weight: 600; }
+  /* dentro desse texto, o que estiver em negrito (<b>) usa a cor principal, não a apagada */
+  .all-done { color: var(--success); font-weight: 600; font-size: 14.5px; }
+  /* estilo da mensagem exibida quando não há nenhuma entrega pendente */
+
+  /* ---------- tabs ---------- */
+  .tabs {
+    display: flex;               /* as abas ficam lado a lado */
+    gap: 6px;                    /* pequeno espaço entre as abas */
+    flex-wrap: wrap;             /* se não couber, as abas quebram para a linha de baixo */
+    margin-bottom: 18px;         /* espaço abaixo do conjunto de abas */
+    border-bottom: 1px solid var(--border);  /* linha divisória abaixo das abas */
+    padding-bottom: 12px;        /* espaço entre as abas e essa linha */
+  }
+  .tab-btn {
+    font-family: 'Work Sans', sans-serif;  /* fonte do texto do botão de aba */
+    font-size: 13.5px;                      /* tamanho do texto */
+    font-weight: 600;                       /* semi-negrito */
+    color: var(--ink-muted);                /* cor padrão (aba não selecionada) */
+    background: transparent;                /* sem fundo por padrão */
+    border: 1px solid transparent;          /* borda invisível (reserva espaço, evita "pulo" de layout) */
+    border-radius: 999px;                   /* valor bem alto = formato de pílula/cápsula */
+    padding: 7px 14px;                      /* espaçamento interno do botão */
+    cursor: pointer;                        /* mostra a mãozinha ao passar o mouse, indicando que é clicável */
+    display: inline-flex;                   /* permite alinhar ícone/texto/contador na mesma linha */
+    align-items: center;                    /* centraliza verticalmente o conteúdo do botão */
+    gap: 7px;                               /* espaço entre a bolinha, o texto e o contador */
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    /* anima suavemente mudanças de fundo, cor de texto e cor de borda (ex.: ao passar o mouse) */
+  }
+  .tab-btn:hover { background: var(--surface-2); color: var(--ink); }
+  /* ao passar o mouse por cima da aba, muda o fundo e escurece o texto */
+  .tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* quando o botão recebe foco pelo teclado (Tab), mostra um contorno visível de acessibilidade */
+  .tab-btn[aria-selected="true"] {
+    background: var(--accent);   /* aba ativa recebe a cor de destaque como fundo */
+    color: var(--accent-ink);    /* e o texto muda para a cor que contrasta com o destaque */
+  }
+  .tab-count {
+    font-family: 'IBM Plex Mono', monospace;   /* fonte monoespaçada para o contador "x/y" */
+    font-size: 11px;                            /* texto pequeno */
+    font-variant-numeric: tabular-nums;         /* dígitos de largura fixa */
+    opacity: 0.85;                              /* levemente transparente, para não competir com o texto principal */
+  }
+  .tab-dot {
+    width: 6px; height: 6px; border-radius: 50%;  /* uma bolinha pequena e redonda */
+    background: var(--ink-muted);                  /* cor padrão da bolinha (módulo incompleto) */
+    flex: none;                                     /* não deixa a bolinha encolher/crescer no flex */
+  }
+  .tab-btn[data-complete="true"] .tab-dot { background: var(--success); }
+  /* se o atributo data-complete da aba for "true" (módulo 100% concluído), a bolinha fica verde */
+  .tab-btn[aria-selected="true"] .tab-dot { background: var(--accent-ink); }
+  /* se a aba estiver selecionada, a bolinha usa a cor de contraste do destaque (para continuar visível no fundo colorido) */
+
+  /* ---------- panel ---------- */
+  .panel-head {
+    display: flex;                     /* título do painel e metadados lado a lado */
+    flex-wrap: wrap;                   /* quebra linha se não couber */
+    align-items: baseline;             /* alinha pela linha de base do texto */
+    justify-content: space-between;    /* empurra um para a esquerda e outro para a direita */
+    gap: 10px;                         /* espaço mínimo entre eles */
+    margin-bottom: 6px;                /* espaço abaixo do cabeçalho do painel */
+  }
+  h2.panel-title {
+    font-family: 'Fraunces', Georgia, serif;  /* mesma fonte serifada do título principal */
+    font-size: 22px;                          /* tamanho do título do módulo/aba ativa */
+    font-weight: 600;                         /* semi-negrito */
+    margin: 0;                                /* remove margem padrão do h2 */
+  }
+  .panel-meta {
+    font-family: 'IBM Plex Mono', monospace;  /* fonte monoespaçada para os metadados (peso da nota, prazo) */
+    font-size: 12px;                           /* texto pequeno */
+    color: var(--ink-muted);                   /* cor apagada */
+    font-variant-numeric: tabular-nums;        /* dígitos de largura fixa */
+  }
+  .panel-progress-row {
+    display: flex;             /* barra de progresso e porcentagem lado a lado */
+    align-items: center;       /* centralizados verticalmente */
+    gap: 10px;                 /* espaço entre eles */
+    margin: 10px 0 22px;       /* margem acima e abaixo dessa linha */
+  }
+  .panel-progress-row .bar-track { flex: 1; margin-top: 0; }
+  /* a barra ocupa todo o espaço disponível e não usa a margem-topo padrão nesse contexto */
+  .panel-progress-row .pct {
+    font-family: 'IBM Plex Mono', monospace;   /* fonte monoespaçada para a porcentagem */
+    font-size: 12.5px;                          /* texto pequeno */
+    color: var(--ink-muted);                    /* cor apagada */
+    font-variant-numeric: tabular-nums;         /* dígitos de largura fixa */
+    white-space: nowrap;                        /* não quebra linha */
+  }
+
+  .group { margin-bottom: 22px; }
+  /* espaço abaixo de cada grupo de itens dentro de um módulo */
+  .group-title {
+    font-size: 11.5px;                 /* título do grupo, pequeno */
+    text-transform: uppercase;         /* maiúsculas */
+    letter-spacing: 0.07em;            /* espaçamento entre letras */
+    font-weight: 600;                  /* semi-negrito */
+    color: var(--accent);              /* cor de destaque */
+    margin-bottom: 8px;                /* espaço abaixo do título do grupo */
+  }
+  ul.checklist { list-style: none; margin: 0; padding: 0; }
+  /* remove as bolinhas padrão de lista e as margens/paddings padrão da <ul> */
+  .item {
+    background: var(--surface);        /* fundo de cada item da checklist */
+    border: 1px solid var(--border);   /* borda fina */
+    border-radius: 10px;               /* cantos arredondados */
+    margin-bottom: 8px;                /* espaço entre um item e o próximo */
+    transition: background 0.15s ease, border-color 0.15s ease;
+    /* anima suavemente a mudança de fundo/borda (ex.: quando marcado como concluído) */
+  }
+  .item:has(input:checked) { background: var(--success-soft); border-color: transparent; }
+  /* :has() é um seletor CSS moderno: se o item CONTÉM um checkbox marcado, o próprio item ganha fundo verde suave */
+  .item label {
+    display: flex;              /* ícone do checkbox e texto lado a lado */
+    align-items: flex-start;    /* alinhados pelo topo (útil quando o texto tem duas linhas: título + nota) */
+    gap: 11px;                  /* espaço entre checkbox e texto */
+    padding: 11px 14px;         /* espaçamento interno clicável do item inteiro */
+    cursor: pointer;            /* toda a label é clicável, não só o quadradinho */
+  }
+  .item input[type="checkbox"] {
+    width: 18px; height: 18px;       /* tamanho do quadradinho de marcar */
+    margin-top: 2px;                  /* pequeno ajuste para alinhar com a primeira linha do texto */
+    accent-color: var(--success);     /* cor do checkbox quando marcado (verde) */
+    flex: none;                       /* não deixa o checkbox esticar/encolher */
+    cursor: pointer;                  /* mãozinha ao passar o mouse */
+  }
+  .item input[type="checkbox"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* contorno de acessibilidade visível quando o checkbox recebe foco via teclado */
+  .item-text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  /* a coluna de texto ocupa o espaço restante e empilha título + nota verticalmente */
+  .item-text .main { display: block; font-size: 14px; color: var(--ink); }
+  /* texto principal da tarefa */
+  .item:has(input:checked) .item-text .main { text-decoration: line-through; color: var(--ink-muted); }
+  /* se o checkbox do item estiver marcado, risca o texto principal e apaga a cor (efeito "tarefa concluída") */
+  .item-text .note { display: block; font-size: 12.5px; color: var(--ink-muted); }
+  /* texto da nota/observação, menor e mais apagado que o texto principal */
+
+  .readonly-banner {
+    background: var(--warn-soft);   /* fundo amarelo suave */
+    color: var(--warn);             /* texto na cor de aviso */
+    border-radius: 10px;            /* cantos arredondados */
+    padding: 10px 14px;             /* espaçamento interno */
+    font-size: 13px;                /* tamanho do texto */
+    margin-bottom: 16px;            /* espaço abaixo do aviso */
+  }
+  /* estilo do aviso mostrado quando a página está em modo "somente leitura" */
+
+  footer.foot {
+    margin-top: 34px;                        /* espaço acima do rodapé */
+    padding-top: 14px;                       /* espaço interno acima do texto do rodapé */
+    border-top: 1px solid var(--border);     /* linha divisória acima do rodapé */
+    font-size: 12px;                         /* texto pequeno */
+    color: var(--ink-muted);                 /* cor apagada */
+  }
+</style>
+<!-- Fim do bloco de estilos -->
+</head>
+<body>
+<!-- Início do corpo visível da página -->
+<div class="wrap"><div id="app"></div></div>
+<!-- .wrap centraliza e limita a largura do conteúdo; #app é o "contêiner vazio" onde o JavaScript vai
+     desenhar (renderizar) todo o HTML da checklist dinamicamente -->
+
+<script id="app-script">
+// Início do bloco de JavaScript. Tem um id porque o próprio script lê o seu texto depois,
+// para gerar uma nova versão do arquivo com o estado salvo embutido
+(function () {
+  // Cria uma "IIFE" (função que roda imediatamente ao ser definida). Isso evita que as variáveis
+  // e funções aqui dentro "vazem" e conflitem com outras variáveis globais da página.
+  "use strict";
+  // Ativa o modo estrito do JavaScript: erros silenciosos viram erros de verdade (ajuda a pegar bugs).
+
+  var HEAD_HTML = document.head.innerHTML;
+  // Guarda uma cópia de todo o conteúdo do <head> (metatags, fontes, CSS) como texto,
+  // para poder remontar o HTML completo depois (usado ao salvar/publicar o estado).
+
+  var MODULES = [
+    // Lista principal: cada objeto aqui é um "módulo" (uma aba/etapa do projeto: Geral, E1, E2, E3, E4, Apresentação).
+    {
+      id: "geral", label: "Geral", title: "Regras do semestre inteiro",
+      // id: identificador interno da aba; label: texto curto do botão da aba; title: título grande mostrado no painel
+      weight: null, deadline: null,
+      // weight: peso na nota (aqui não tem, pois são regras gerais); deadline: data de entrega (não tem, também)
+      groups: [
+        // "groups" divide os itens desse módulo em subgrupos com título próprio
+        { title: "Vale para todas as entregas", items: [
+          // cada "item" é uma tarefa da checklist, com id único, texto (text) e, opcionalmente, uma nota explicativa (note)
+          { id: "geral-grupo-tamanho", text: "Confirmar com o professor a exceção do grupo de 5 integrantes", note: "O guia do projeto permite só 3 ou 4 pessoas — resolver antes que vire problema de nota." },
+          { id: "geral-prazo-interno", text: "Combinar um prazo interno, 3 dias antes de cada entrega real", note: "O upload no Moodle costuma falhar exatamente no domingo à noite." },
+          { id: "geral-divisao", text: "Dividir tarefas por tela ou por camada, não por 'quem faz HTML e quem faz CSS'" },
+          { id: "geral-integrante-sumido", text: "Combinar: se alguém parar de responder, avisar a professora antes da entrega", note: "Dá para remanejar antes; refazer a nota depois, não." },
+          { id: "geral-coerencia", text: "Reler a persona e o princípio norteador da E1 antes de cada entrega seguinte", note: "Coerência é um dos 4 critérios de nota em toda entrega." }
+        ]}
+      ]
+    },
+    {
+      id: "e1", label: "E1", title: "E1 — Pesquisa e Definição",
+      weight: "20%", deadline: "2026-09-27",
+      // este módulo tem peso 20% da nota e prazo em 27/09/2026
+      groups: [
+        { title: "Empatia, persona e jornada", items: [
+          { id: "e1-entrevistas", text: "3 entrevistas aplicadas, com roteiro e uma citação textual de cada" },
+          { id: "e1-persona", text: "Persona montada, com cada traço rastreável a uma entrevista" },
+          { id: "e1-jornada", text: "Mapa de jornada com os pontos de dor marcados" }
+        ]},
+        { title: "Definição e ideação", items: [
+          { id: "e1-definicao", text: "Definição do problema em uma frase" },
+          { id: "e1-ideacao", text: "8 ou mais ideias geradas, 2 escolhidas com justificativa" },
+          { id: "e1-principio", text: "Princípio norteador falsificável" }
+        ]},
+        { title: "Antes de enviar", items: [
+          { id: "e1-grupo-revisou", text: "Grupo revisou e ajustou a lista de ideação junto", note: "Importante para conseguir defender na arguição de dezembro." },
+          { id: "e1-releitura", text: "Documento revisado por todo mundo (texto, coerência, sem erro)" },
+          { id: "e1-envio", text: "PDF enviado no Moodle até 27/09, 23h59" }
+        ]}
+      ]
+    },
+    {
+      id: "e2", label: "E2", title: "E2 — Protótipo e Teste",
+      weight: "25%", deadline: "2026-10-18",
+      groups: [
+        { title: "Wireframes e Figma", items: [
+          { id: "e2-leitura-roteiro", text: "Ler o roteiro_figma.md antes de montar o protótipo" },
+          { id: "e2-wireframes", text: "Wireframes de baixa fidelidade de todas as telas do fluxo principal", note: "Papel ou Figma, sem cor e sem tipografia definida." },
+          { id: "e2-wireframes-foto", text: "Fotografar ou digitalizar os wireframes e incluir no PDF" },
+          { id: "e2-paleta", text: "Definir paleta de cores e tipografia, com justificativa de 1 linha cada" },
+          { id: "e2-figma-telas", text: "Montar de 4 a 6 telas no Figma, já com cor e tipografia" },
+          { id: "e2-figma-links", text: "Conectar os links entre as telas — protótipo navegável de ponta a ponta" },
+          { id: "e2-figma-compartilhar", text: "Testar o link do Figma em aba anônima", note: "Compartilhamento liberado para 'qualquer pessoa com o link'." }
+        ]},
+        { title: "Teste de usabilidade", items: [
+          { id: "e2-teste-3pessoas", text: "Aplicar o teste de usabilidade com 3 pessoas", note: "Diga a tarefa uma vez, deixe pensar em voz alta, fique calado, anote onde travou." },
+          { id: "e2-teste-registro", text: "Registrar por pessoa: o que tentou, onde travou, quanto tempo levou" },
+          { id: "e2-tabela-mudancas", text: "Montar a tabela achado → mudança, com no mínimo 3 linhas" },
+          { id: "e2-aplicar-mudancas", text: "Aplicar as mudanças encontradas de volta no protótipo" }
+        ]},
+        { title: "Antes de enviar", items: [
+          { id: "e2-pdf-final", text: "Montar o PDF final (wireframes + link do Figma + teste + tabela)" },
+          { id: "e2-envio", text: "PDF + link do Figma enviados no Moodle até 18/10, 23h59" }
+        ]}
+      ]
+    },
+    {
+      id: "e3", label: "E3", title: "E3 — Interface em Código",
+      weight: "30%", deadline: "2026-11-15",
+      groups: [
+        { title: "Estrutura e repositório", items: [
+          { id: "e3-repo", text: "Criar o repositório no GitHub (público), com todos como colaboradores" },
+          { id: "e3-paginas", text: "3 a 5 páginas HTML navegáveis entre si, fiéis ao protótipo da E2" },
+          { id: "e3-semantica", text: "HTML semântico: header, nav, main, section, footer, títulos em ordem", note: "Conferido na estrutura pelo DevTools." },
+          { id: "e3-formulario", text: "Um formulário com label amarrado ao campo, type correto e validação nativa", note: "Testado enviando vazio e com dado inválido." }
+        ]},
+        { title: "CSS e responsividade", items: [
+          { id: "e3-css-externo", text: "CSS externo em arquivo próprio — nenhum style= inline no HTML" },
+          { id: "e3-responsivo", text: "Responsivo em 360px, 768px e 1280px, sem rolagem horizontal" },
+          { id: "e3-layout", text: "Layout com Flexbox e/ou Grid — nada de float para layout" }
+        ]},
+        { title: "Acessibilidade", items: [
+          { id: "e3-teclado", text: "Navegável só pelo teclado: Tab percorre tudo, foco sempre visível", note: "Testar de mouse guardado na gaveta." },
+          { id: "e3-alt", text: "Todas as imagens com alt que descreve, ou alt vazio se decorativa" }
+        ]},
+        { title: "Antes de enviar", items: [
+          { id: "e3-mudancas-md", text: "Escrever MUDANCAS.md: o que ficou diferente do protótipo e por quê" },
+          { id: "e3-teste-outra-maquina", text: "Clonar o repositório em outra máquina e abrir o index.html sem instalar nada" },
+          { id: "e3-zip", text: "Gerar o .zip com os mesmos arquivos do repositório" },
+          { id: "e3-envio", text: "Link do GitHub + .zip enviados no Moodle até 15/11, 23h59" },
+          { id: "e3-revisao-prova", text: "Revisar o HTML/CSS do projeto como preparo para a prova M4 (19/11)" }
+        ]}
+      ]
+    },
+    {
+      id: "e4", label: "E4", title: "E4 — Versão Final",
+      weight: "25%", deadline: "2026-12-06",
+      groups: [
+        { title: "JavaScript e DOM", items: [
+          { id: "e4-manter-e3", text: "Confirmar que tudo da E3 continua funcionando" },
+          { id: "e4-js-3comportamentos", text: "Implementar pelo menos 3 comportamentos reais em JavaScript", note: "Ex.: filtro de lista, validação com mensagem própria, alternar tema, abrir/fechar menu, adicionar item, ordenar." },
+          { id: "e4-dom", text: "Garantir manipulação de DOM — a página muda sem recarregar" }
+        ]},
+        { title: "Framework CSS", items: [
+          { id: "e4-framework-css", text: "Adicionar um componente com framework CSS (Tailwind ou Bootstrap)" },
+          { id: "e4-css-comentado", text: "Comentar ao lado o equivalente do mesmo componente em CSS puro" }
+        ]},
+        { title: "README e relato", items: [
+          { id: "e4-readme", text: "Escrever o README.md: o que é, para quem, como rodar, o que cada arquivo faz, créditos do grupo" },
+          { id: "e4-relato-4a", text: "Responder no README a pergunta 4a: decisão da E1 mantida x abandonada, e por quê" },
+          { id: "e4-relato-4b", text: "Responder no README a pergunta 4b: achado do teste que sobreviveu até o código, colando a linha de HTML/CSS" }
+        ]},
+        { title: "Antes de enviar", items: [
+          { id: "e4-commits", text: "Conferir commits de todos os integrantes no histórico do Git" },
+          { id: "e4-console", text: "Console sem nenhum erro" },
+          { id: "e4-envio", text: "Link do GitHub + .zip enviados no Moodle até 06/12, 23h59" }
+        ]}
+      ]
+    },
+    {
+      id: "apresentacao", label: "Apresentação", title: "Apresentação final",
+      weight: "compõe a E4", deadline: "2026-12-10",
+      groups: [
+        { title: "Preparo", items: [
+          { id: "ap-ensaio", text: "Ensaiar a apresentação inteira dentro de 10 minutos" },
+          { id: "ap-todos-falam", text: "Garantir que todos os integrantes falem" },
+          { id: "ap-arguicao", text: "Preparar respostas para a arguição", note: "Cada um precisa conseguir defender as próprias linhas de código." }
+        ]},
+        { title: "Roteiro (10 min)", items: [
+          { id: "ap-roteiro-problema", text: "1 min — o problema e a persona" },
+          { id: "ap-roteiro-principio", text: "1 min — o princípio norteador e por que ele" },
+          { id: "ap-roteiro-teste", text: "2 min — do wireframe ao protótipo: o que o teste mudou" },
+          { id: "ap-roteiro-demo", text: "4 min — demonstração ao vivo do produto rodando", note: "É a parte que mais pesa — slides de tela não substituem." },
+          { id: "ap-roteiro-reflexao", text: "2 min — o que fariam diferente, com o que sabem hoje" }
+        ]}
+      ]
+    }
+  ];
+  // Fim da lista MODULES: ela é a "fonte de verdade" de todo o conteúdo da checklist —
+  // o resto do script só lê essa lista e desenha o HTML a partir dela.
+
+  var STATE = /*STATE_START*/{"e1-entrevistas":true,"e1-persona":true,"e1-jornada":true,"e1-definicao":true,"e1-ideacao":true,"e1-principio":true}/*STATE_END*/;
+  // STATE guarda quais itens estão marcados (true = concluído). Os comentários /*STATE_START*/ /*STATE_END*/
+  // são marcadores especiais: quando o estado é salvo, o próprio script reescreve exatamente este trecho
+  // do arquivo com o JSON atualizado (é assim que o progresso "persiste" dentro do próprio HTML).
+
+  var activeTab = null;
+  // Guarda qual aba (módulo) está aberta no momento; começa vazia e é definida mais abaixo.
+  var readOnly = false;
+  // Controla se a checklist está travada para edição (true = usuário só pode visualizar, não marcar).
+  var persistMode = "none";
+  // Indica ONDE o progresso será salvo: "none" (ainda não decidido), "artifact" (salvo como Artifact do Claude)
+  // ou "local" (salvo no localStorage do navegador).
+  var artifactApi = null;
+  // Vai guardar a referência à API de Artifact (se disponível), usada para publicar o estado atualizado.
+
+  function allItems() {
+    // Retorna uma lista "achatada" (flat) com TODOS os itens de TODOS os módulos e grupos, sem separação.
+    var out = [];
+    MODULES.forEach(function (m) {
+      // Para cada módulo...
+      m.groups.forEach(function (g) { g.items.forEach(function (it) { out.push(it); }); });
+      // ...para cada grupo dentro dele, e para cada item dentro do grupo, adiciona o item na lista "out".
+    });
+    return out;
+    // Devolve a lista completa de itens.
+  }
+
+  function moduleStats(mod, state) {
+    // Calcula estatísticas (total de itens, quantos concluídos, porcentagem) de UM módulo específico.
+    var items = [];
+    mod.groups.forEach(function (g) { items = items.concat(g.items); });
+    // Junta todos os itens de todos os grupos desse módulo em uma única lista.
+    var done = items.filter(function (it) { return !!state[it.id]; }).length;
+    // Conta quantos desses itens estão marcados como concluídos no objeto "state" (!!  converte para booleano).
+    return { total: items.length, done: done, pct: items.length ? Math.round(done / items.length * 100) : 0 };
+    // Retorna um objeto com o total de itens, quantos feitos, e a porcentagem arredondada
+    // (evita divisão por zero: se não houver itens, a porcentagem é 0).
+  }
+
+  function overallStats(state) {
+    // Mesmo cálculo de moduleStats, mas considerando TODOS os módulos juntos (progresso geral do projeto).
+    var items = allItems();
+    var done = items.filter(function (it) { return !!state[it.id]; }).length;
+    return { total: items.length, done: done, pct: items.length ? Math.round(done / items.length * 100) : 0 };
+  }
+
+  function daysLeft(deadlineStr) {
+    // Calcula quantos dias faltam (ou já passaram, se negativo) até uma data de prazo.
+    var deadline = new Date(deadlineStr + "T23:59:59-03:00");
+    // Monta a data do prazo às 23h59min59s no fuso de Brasília (-03:00), já que os prazos vêm como "AAAA-MM-DD".
+    var now = new Date();
+    // Pega a data/hora atual no momento em que a página é carregada.
+    return Math.ceil((deadline - now) / 86400000);
+    // Subtrai as datas (resultado em milissegundos), divide por 86.400.000 (nº de ms em um dia)
+    // e arredonda para cima, obtendo o número de dias restantes.
+  }
+
+  function nextDeadlineInfo(state) {
+    // Descobre qual é a PRÓXIMA entrega pendente (a mais próxima no tempo, entre as que ainda não foram concluídas).
+    var withDeadline = MODULES.filter(function (m) { return m.deadline; });
+    // Filtra só os módulos que têm data de prazo definida (o módulo "Geral" não entra, pois deadline é null).
+    var pending = withDeadline.filter(function (m) { var s = moduleStats(m, state); return s.done < s.total; });
+    // Dentre esses, mantém só os módulos que ainda NÃO estão 100% concluídos.
+    if (!pending.length) return null;
+    // Se não sobrou nenhum módulo pendente, retorna null (significa "tudo em dia").
+    pending.sort(function (a, b) { return new Date(a.deadline) - new Date(b.deadline); });
+    // Ordena os módulos pendentes por data de prazo, do mais próximo para o mais distante.
+    var m = pending[0];
+    // Pega o primeiro da lista ordenada — ou seja, o prazo mais urgente.
+    return { mod: m, days: daysLeft(m.deadline) };
+    // Retorna o módulo mais urgente junto com quantos dias faltam para o prazo dele.
+  }
+
+  function defaultActiveTab(state) {
+    // Decide qual aba deve abrir por padrão quando a página carrega.
+    for (var i = 0; i < MODULES.length; i++) {
+      // Percorre os módulos na ordem em que aparecem em MODULES.
+      var s = moduleStats(MODULES[i], state);
+      if (s.done < s.total) return MODULES[i].id;
+      // Retorna o id do primeiro módulo que ainda não está 100% concluído.
+    }
+    return MODULES[0].id;
+    // Se todos os módulos já estiverem completos, abre o primeiro módulo mesmo assim.
+  }
+
+  function escapeHtml(s) {
+    // Converte caracteres especiais de HTML (& < > " ') em suas versões seguras (entidades),
+    // para evitar que texto digitado pelo usuário quebre a página ou injete código malicioso.
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      // Para cada caractere perigoso encontrado, troca pelo código de entidade HTML correspondente.
+    });
+  }
+
+  function fmtDate(deadlineStr) {
+    // Formata uma data no formato "AAAA-MM-DD" para o formato brasileiro "DD/MM (dia da semana)".
+    var d = new Date(deadlineStr + "T12:00:00-03:00");
+    // Cria a data ao meio-dia no fuso de Brasília, para evitar problemas de "virar o dia" por fuso horário.
+    var dias = ["dom","seg","ter","qua","qui","sex","sáb"];
+    // Lista com as abreviações dos dias da semana, na ordem que o JavaScript usa (0 = domingo).
+    return String(d.getDate()).padStart(2,"0") + "/" + String(d.getMonth()+1).padStart(2,"0") + " (" + dias[d.getDay()] + ")";
+    // Monta a string final: dia com 2 dígitos + "/" + mês com 2 dígitos (getMonth começa em 0, por isso o +1) + dia da semana entre parênteses.
+  }
+
+  function renderTabs(state, active) {
+    // Gera o HTML (como texto) da barra de abas, marcando qual está ativa.
+    return '<nav class="tabs" role="tablist" aria-label="Módulos do projeto">' +
+      // Abre a navegação de abas, com atributos de acessibilidade (role="tablist").
+      MODULES.map(function (m) {
+        // Para cada módulo, gera um botão de aba.
+        var s = moduleStats(m, state);
+        var complete = s.total > 0 && s.done === s.total;
+        // "complete" é true só se o módulo tiver itens e todos estiverem concluídos.
+        return '<button class="tab-btn" role="tab" data-tab="' + m.id + '" data-complete="' + complete + '" aria-selected="' + (m.id === active) + '">' +
+          // Cria o botão da aba, guardando o id do módulo em data-tab, se está completo em data-complete,
+          // e se está selecionada em aria-selected (usado tanto para acessibilidade quanto para o CSS).
+          '<span class="tab-dot"></span>' + escapeHtml(m.label) +
+          // A bolinha indicadora + o rótulo da aba (escapado para segurança).
+          '<span class="tab-count">' + s.done + '/' + s.total + '</span>' +
+          // O contador "feitos/total" ao lado do nome da aba.
+          '</button>';
+      }).join("") +
+      // Junta o HTML de todos os botões em uma única string, sem separador.
+      '</nav>';
+      // Fecha a navegação.
+  }
+
+  function renderHeader(state) {
+    // Gera o HTML do cabeçalho: título, progresso geral e card de próxima entrega.
+    var o = overallStats(state);
+    // Estatísticas gerais (progresso de todo o projeto).
+    var next = nextDeadlineInfo(state);
+    // Informação sobre a próxima entrega pendente (ou null, se tudo estiver em dia).
+    var deadlineHtml;
+    if (!next) {
+      // Se não há entrega pendente, mostra uma mensagem de "tudo em dia".
+      deadlineHtml = '<div class="status-card"><div class="label">Próxima entrega</div><div class="all-done">Tudo em dia — nenhuma entrega pendente 🎉</div></div>';
+    } else {
+      // Caso contrário, monta o card mostrando quantos dias faltam e qual é essa entrega.
+      var cls = next.days < 0 ? "danger" : (next.days <= 7 ? "warn" : "ok");
+      // Define a cor do "chip": vermelho se já passou do prazo, amarelo se faltam 7 dias ou menos, verde caso contrário.
+      var dayLabel = next.days < 0 ? (Math.abs(next.days) + "d atrasada") : (next.days + "d");
+      // Texto do chip: se negativo, mostra "Xd atrasada" (valor absoluto); senão, mostra "Xd" (dias restantes).
+      deadlineHtml = '<div class="status-card">' +
+        '<div class="label">Próxima entrega</div>' +
+        '<div class="deadline-body">' +
+          '<div class="deadline-chip ' + cls + '">' + dayLabel + '</div>' +
+          '<div class="deadline-text"><b>' + escapeHtml(next.mod.label) + '</b><br>' + fmtDate(next.mod.deadline) + '</div>' +
+        '</div>' +
+      '</div>';
+      // Monta o card final: rótulo, o chip colorido com os dias, e o nome + data da entrega.
+    }
+    return '<header class="top">' +
+      '<div>' +
+        '<div class="eyebrow">Projeto de Interfaces</div>' +
+        '<h1 class="title">Backstage da Festa</h1>' +
+        '<div class="subtitle">Site do salão de festas — orçamento e disponibilidade · checklist do semestre</div>' +
+      '</div>' +
+      // Bloco fixo com o rótulo pequeno, o título grande e o subtítulo do projeto.
+      '<div class="status-row">' +
+        '<div class="status-card">' +
+          '<div class="label">Progresso geral</div>' +
+          '<div class="overall-num"><span class="big">' + o.pct + '%</span><span class="small">' + o.done + ' de ' + o.total + ' itens</span></div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + o.pct + '%"></div></div>' +
+        '</div>' +
+        // Card de progresso geral: porcentagem grande + "X de Y itens" + barra de progresso preenchida via style inline.
+        deadlineHtml +
+      '</div>' +
+      // Junta o card de progresso geral com o card de próxima entrega, lado a lado.
+      (readOnly ? '<div class="readonly-banner">Este painel está em modo somente leitura nesta visualização — as marcações não vão salvar.</div>' : '') +
+      // Se estiver em modo somente-leitura, mostra um aviso; senão, não adiciona nada (string vazia).
+    '</header>';
+  }
+
+  function renderPanel(mod, state) {
+    // Gera o HTML do painel principal: título do módulo ativo, metadados, barra de progresso e a lista de itens.
+    var s = moduleStats(mod, state);
+    // Estatísticas desse módulo específico.
+    var metaParts = [];
+    if (mod.weight) metaParts.push(mod.weight + " da nota");
+    // Se o módulo tem peso na nota, adiciona esse texto aos metadados.
+    if (mod.deadline) metaParts.push("prazo " + fmtDate(mod.deadline));
+    // Se o módulo tem prazo, adiciona a data formatada.
+    return '<section class="panel" role="tabpanel">' +
+      '<div class="panel-head">' +
+        '<h2 class="panel-title">' + escapeHtml(mod.title) + '</h2>' +
+        '<div class="panel-meta">' + escapeHtml(metaParts.join(" · ")) + '</div>' +
+      '</div>' +
+      // Cabeçalho do painel: título grande do módulo + metadados separados por " · ".
+      '<div class="panel-progress-row"><div class="bar-track"><div class="bar-fill" style="width:' + s.pct + '%"></div></div><div class="pct">' + s.done + '/' + s.total + '</div></div>' +
+      // Linha com a barra de progresso do módulo e o contador "feitos/total" ao lado.
+      mod.groups.map(function (g) {
+        // Para cada grupo de itens dentro do módulo...
+        return '<div class="group">' +
+          '<div class="group-title">' + escapeHtml(g.title) + '</div>' +
+          '<ul class="checklist">' +
+            g.items.map(function (it) {
+              // Para cada item da checklist dentro do grupo...
+              var checked = !!state[it.id];
+              // Verifica se esse item já está marcado como concluído.
+              return '<li class="item"><label>' +
+                '<input type="checkbox" data-id="' + it.id + '" ' + (checked ? "checked" : "") + (readOnly ? " disabled" : "") + '>' +
+                // Cria o checkbox: guarda o id do item em data-id, marca "checked" se já estiver concluído,
+                // e adiciona "disabled" (desabilitado) se a página estiver em modo somente-leitura.
+                '<span class="item-text"><span class="main">' + escapeHtml(it.text) + '</span>' +
+                (it.note ? '<span class="note">' + escapeHtml(it.note) + '</span>' : '') +
+                // Mostra o texto principal da tarefa e, se existir, a nota explicativa abaixo.
+                '</span></label></li>';
+            }).join("") +
+          '</ul>' +
+        '</div>';
+      }).join("") +
+      // Junta o HTML de todos os grupos desse módulo.
+    '</section>';
+  }
+
+  function renderApp(state, active) {
+    // Função "mestre" de renderização: monta a página inteira (cabeçalho + abas + painel + rodapé) como uma única string HTML.
+    var mod = MODULES.filter(function (m) { return m.id === active; })[0] || MODULES[0];
+    // Encontra o módulo cujo id bate com "active"; se não encontrar (ou não houver ativo), usa o primeiro módulo como reserva.
+    return renderHeader(state) + renderTabs(state, mod.id) + renderPanel(mod, state) +
+      '<footer class="foot">Marcações salvas automaticamente neste painel' + (persistMode === "local" ? " (somente neste navegador)" : "") + '.</footer>';
+      // Junta cabeçalho + abas + painel do módulo ativo + rodapé (que avisa se o salvamento é só local a este navegador).
+  }
+
+  function buildScriptSrc(state) {
+    // Gera o novo texto do <script> substituindo o estado salvo (STATE) pelo estado atual, dentro do código-fonte.
+    var scriptEl = document.getElementById("app-script");
+    // Pega de volta a própria tag <script> pelo id definido no HTML.
+    var src = scriptEl ? scriptEl.textContent : "";
+    // Lê o conteúdo de texto (código) desse script; se não achar, usa string vazia.
+    var json = JSON.stringify(state);
+    // Converte o objeto de estado (quais itens estão marcados) em uma string JSON.
+    return src.replace(/\/\*STATE_START\*\/[\s\S]*?\/\*STATE_END\*\//, "/*STATE_START*/" + json + "/*STATE_END*/");
+    // Usa uma expressão regular para localizar o trecho entre os marcadores /*STATE_START*/ ... /*STATE_END*/
+    // e substitui pelo novo JSON, mantendo os marcadores — é assim que o progresso fica "gravado" no próprio arquivo.
+  }
+
+  function buildFullHTML(state) {
+    // Monta o arquivo HTML completo (do zero) para salvar/publicar, incluindo o <head> original e o script atualizado.
+    return "<!doctype html>\n<html lang=\"pt-BR\">\n<head>\n" + HEAD_HTML + "\n</head>\n<body>\n" +
+      "<div class=\"wrap\"><div id=\"app\"></div></div>\n" +
+      "<script id=\"app-script\">" + buildScriptSrc(state) + "<\/script>\n" +
+      // O "<\/script>" usa barra invertida antes de "/script" para não fechar acidentalmente
+      // a tag <script> que já está envolvendo este próprio código.
+      "</body>\n</html>";
+  }
+
+  function rerender() {
+    // Redesenha toda a interface: substitui o conteúdo da div #app pelo HTML gerado a partir do estado e aba atuais.
+    document.getElementById("app").innerHTML = renderApp(STATE, activeTab);
+  }
+
+  function handleClick(e) {
+    // Trata cliques dentro da área do app — usado para detectar clique nas abas.
+    var tabBtn = e.target.closest(".tab-btn");
+    // Procura, a partir do elemento clicado, o botão de aba mais próximo (caso o clique tenha sido num filho do botão).
+    if (tabBtn) {
+      // Se o clique foi realmente em (ou dentro de) um botão de aba...
+      activeTab = tabBtn.getAttribute("data-tab");
+      // ...atualiza qual é a aba ativa, lendo o id salvo no atributo data-tab.
+      rerender();
+      // Redesenha a página para mostrar o painel da nova aba selecionada.
+    }
+  }
+
+  function handleChange(e) {
+    // Trata o evento "change" (mudança de valor) — usado para detectar quando um checkbox é marcado/desmarcado.
+    var box = e.target;
+    if (box.tagName !== "INPUT" || box.type !== "checkbox") return;
+    // Se o elemento que mudou não for um checkbox, ignora (sai da função sem fazer nada).
+    var id = box.getAttribute("data-id");
+    if (!id || readOnly) return;
+    // Se o checkbox não tiver um id de item associado, ou se a página estiver em modo somente-leitura, ignora.
+    var newState = Object.assign({}, STATE);
+    // Cria uma CÓPIA do objeto STATE (Object.assign com objeto vazio como destino), para não alterar o original diretamente.
+    newState[id] = box.checked;
+    // Na cópia, atualiza o item marcado/desmarcado com o novo valor (true ou false).
+    STATE = newState;
+    // Substitui o STATE global pela nova versão já atualizada.
+    rerender();
+    // Redesenha a tela imediatamente, refletindo a marcação feita.
+    saveState(newState);
+    // Dispara o salvamento do novo estado (localStorage ou Artifact, dependendo do modo).
+  }
+
+  function saveState(newState) {
+    // Salva o estado atualizado no destino apropriado, conforme o "persistMode" configurado.
+    if (persistMode === "artifact" && artifactApi) {
+      // Se o modo de persistência é "artifact" e a API está disponível...
+      artifactApi.publish(buildFullHTML(newState)).catch(function (err) {
+        // Tenta publicar uma nova versão do HTML completo (com o estado atualizado) como Artifact.
+        // Se a publicação falhar (Promise rejeitada), trata o erro:
+        if (err && (err.code === "not_writer" || err.code === "not_granted")) {
+          // Se o erro indica que o usuário não tem permissão de escrita/edição...
+          readOnly = true;
+          rerender();
+          // ...trava a página em modo somente-leitura e redesenha (mostrando o aviso correspondente).
+        }
+        // conflict / other codes: the view reloads to the winning version, or is transient — no action needed
+        // (comentário original do autor: para outros tipos de erro — como conflito de versões —
+        // a própria visualização será recarregada com a versão vencedora, ou é um erro passageiro; nada a fazer aqui)
+      });
+    } else if (persistMode === "local") {
+      // Se o modo é "local" (sem Artifact disponível)...
+      try { localStorage.setItem("backstage-da-festa-state", JSON.stringify(newState)); } catch (e) {}
+      // ...tenta salvar o estado como JSON no localStorage do navegador, sob essa chave.
+      // O try/catch evita quebrar a página caso o navegador bloqueie o localStorage (ex.: modo anônimo restrito).
+    }
+  }
+
+  function initPersistence() {
+    // Decide, ao carregar a página, ONDE o progresso será salvo: tenta usar a API de Artifact do Claude;
+    // se não existir, cai para o armazenamento local do navegador.
+    if (window.claude && typeof window.claude.use === "function") {
+      // Se existir o objeto global "window.claude" com uma função "use"...
+      window.claude.use("artifact").then(function (api) {
+        // ...pede acesso à funcionalidade "artifact" (permite publicar novas versões deste HTML).
+        if (api) {
+          // Se a API foi concedida com sucesso...
+          artifactApi = api;
+          persistMode = "artifact";
+          // ...guarda a referência e define o modo de persistência como "artifact".
+        } else {
+          fallbackToLocal();
+          // Se não veio uma API válida, usa o armazenamento local como alternativa.
+        }
+      }).catch(fallbackToLocal);
+      // Se a promessa "use" falhar (erro/rejeição), também cai para o armazenamento local.
+    } else {
+      fallbackToLocal();
+      // Se "window.claude" nem existir (ex.: página aberta fora do ambiente do Claude), usa localStorage direto.
+    }
+  }
+
+  function fallbackToLocal() {
+    // Ativa o modo de persistência local e tenta recuperar um estado salvo anteriormente no navegador.
+    persistMode = "local";
+    try {
+      var saved = localStorage.getItem("backstage-da-festa-state");
+      // Busca no localStorage se já existe um estado salvo sob essa chave.
+      if (saved) {
+        STATE = Object.assign({}, STATE, JSON.parse(saved));
+        // Se existir, mescla o estado salvo por cima do estado inicial (o salvo tem prioridade),
+        // preservando itens que não estavam no JSON salvo, se houver algum caso assim.
+        rerender();
+        // Redesenha a tela já com o progresso recuperado.
+      }
+    } catch (e) {}
+    // Ignora silenciosamente qualquer erro (ex.: JSON inválido, localStorage bloqueado).
+  }
+
+  activeTab = defaultActiveTab(STATE);
+  // Define a aba inicial: a primeira que ainda tem pendências (ou a primeira de todas, se tudo estiver completo).
+  document.getElementById("app").addEventListener("click", handleClick);
+  // Registra o ouvinte de cliques na div #app, delegando o tratamento de clique nas abas para handleClick.
+  document.getElementById("app").addEventListener("change", handleChange);
+  // Registra o ouvinte de mudanças (marcar/desmarcar checkbox) na div #app, delegando para handleChange.
+  rerender();
+  // Faz a primeira renderização da página, desenhando tudo pela primeira vez.
+  initPersistence();
+  // Inicializa o sistema de salvamento (Artifact ou localStorage), podendo recarregar progresso salvo.
+})();
+// Fecha e executa imediatamente a função anônima definida no início (a IIFE).
+</script>
+<!-- Fim do bloco de JavaScript -->
+</body>
+</html>
