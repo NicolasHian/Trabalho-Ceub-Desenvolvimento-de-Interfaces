@@ -1,0 +1,283 @@
+/* Estilos da página de orçamento (o resto vem do Tailwind) */
+
+:root {
+  --color-sky: #A9D6E8;
+  --color-ivory: #F5EEDD;
+  --color-navy: #1F3A56;
+  --color-teal: #2E7A72;
+  --color-gold: #E2A93E;
+  --color-gold-dark: #8A5D0E;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #FFFFFF;
+  color: var(--color-navy);
+  margin: 0;
+  padding: 0;
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 60;
+  background: var(--color-navy);
+  color: #FFFFFF;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+/* Opções da calculadora: o input fica invisível e o span faz o papel do botão */
+.chip {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.chip span {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  background-color: #FFFFFF;
+  border: 1.5px solid #D6CEB8;
+  border-radius: 1rem;
+  color: var(--color-navy);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  user-select: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.chip:hover span {
+  border-color: var(--color-teal);
+  background-color: #FAF6ED;
+}
+
+.chip input:checked + span {
+  background-color: var(--color-teal);
+  border-color: var(--color-teal);
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(46, 122, 114, 0.2);
+}
+
+.chip input:focus-visible + span {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* Botão dourado */
+.btn-cta-gold {
+  background-color: var(--color-gold);
+  color: var(--color-navy);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-cta-gold:hover {
+  background-color: #f0b848;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(226, 169, 62, 0.45);
+}
+
+.btn-cta-gold:active {
+  transform: translateY(0);
+}
+
+/* Calendário */
+.calendar-day {
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.625rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.calendar-day.available {
+  background-color: #FFFFFF;
+  color: var(--color-navy);
+  border: 1px solid #D6CEB8;
+}
+
+.calendar-day.weekend-day {
+  border-color: var(--color-gold);
+  background-color: #FFFDF8;
+}
+
+.calendar-day.available:hover {
+  background-color: var(--color-sky);
+  border-color: var(--color-teal);
+  transform: scale(1.04);
+  z-index: 2;
+}
+
+.calendar-day[aria-pressed="true"] {
+  background-color: var(--color-teal);
+  color: #FFFFFF;
+  border: 2px solid var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(226, 169, 62, 0.35);
+}
+
+.calendar-day:disabled {
+  background-color: #E8E2D5;
+  color: #8A8273;
+  text-decoration: line-through;
+  cursor: not-allowed;
+  border: 1px dashed #C5BCAB;
+}
+
+.price-update-pulse {
+  animation: pulsePrice 0.3s ease-out;
+}
+
+@keyframes pulsePrice {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* Janela de reserva */
+.modal-reserva {
+  width: min(32rem, calc(100% - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow-y: auto;
+}
+
+.modal-reserva[open] {
+  animation: entrar 0.2s ease-out;
+}
+
+.modal-reserva::backdrop {
+  background: rgba(31, 58, 86, 0.7);
+  backdrop-filter: blur(2px);
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.campo:user-invalid {
+  border-color: #B42318;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/*
+  Cartão "Valor total do orçamento" em CSS puro.
+  Na página ele foi feito com classes do Tailwind; aqui está o mesmo cartão sem o framework,
+  comentado porque não é usado.
+
+.cartao-total {
+  background-color: #F5EEDD;
+  border: 2px solid #E2DA9D;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cartao-total h3 {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+  color: #1F3A56;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem;
+}
+
+.cartao-total .preco-caixa {
+  margin: 0.75rem 0;
+}
+
+.cartao-total .preco {
+  display: block;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 900;
+  color: #1F3A56;
+  letter-spacing: -0.025em;
+}
+
+.cartao-total .validade {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  color: rgb(31 58 86 / 0.7);
+  margin-top: 0.25rem;
+}
+
+.cartao-total .acoes {
+  margin-top: 1.5rem;
+}
+
+.cartao-total button {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  font-weight: 900;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+@media (min-width: 768px) {
+  .cartao-total { padding: 1.75rem; }
+  .cartao-total .preco { font-size: 3rem; line-height: 1; }
+}
+*/

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orçamento - Espaço Bem Me Quer</title>
+  <meta name="description" content="Calculadora de orçamento do Espaço Bem Me Quer: escolha espaço, convidados, serviços e data e veja o valor na hora.">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/orcamento.css">
+  <script src="js/orcamento.js" defer></script>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <a class="skip-link" href="#orcamento">Pular para a calculadora</a>
+
+  <!-- topo -->
+  <header class="bg-white border-b border-stone-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-0 md:h-20 flex flex-wrap md:flex-nowrap items-center justify-between gap-x-6 gap-y-2">
+
+      <a href="index.html" class="text-2xl font-black text-[#1F3A56] tracking-tight hover:opacity-90 transition-opacity">
+        Bem Me Quer
+      </a>
+
+      <nav aria-label="Menu principal" class="order-3 w-full md:order-none md:w-auto flex justify-between sm:justify-center md:justify-start gap-4 sm:gap-8">
+        <a href="espacos.html" class="text-sm font-semibold text-[#1F3A56] hover:text-[#2E7A72] transition-colors">Espaços</a>
+        <a href="galeria.html" class="text-sm font-semibold text-[#1F3A56] hover:text-[#2E7A72] transition-colors">Galeria</a>
+        <a href="faq.html" class="text-sm font-semibold text-[#1F3A56] hover:text-[#2E7A72] transition-colors">FAQ</a>
+        <a href="orcamento.html" aria-current="page" class="text-sm font-semibold text-[#2E7A72] underline underline-offset-8 decoration-2">Orçamento</a>
+      </nav>
+
+      <a href="#orcamento" class="hidden sm:inline-flex bg-[#E2A93E] hover:bg-[#f0b848] text-[#1F3A56] font-bold text-sm px-5 py-3 rounded-xl transition-all shadow-sm items-center gap-2">
+        <span>Simule seu orçamento</span>
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+
+    </div>
+  </header>
+
+  <main id="orcamento" class="flex-grow w-full scroll-mt-32">
+
+    <div class="bg-[#A9D6E8] py-12 md:py-16 border-b border-[#8FC8DF] text-center w-full">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-[#1F3A56] tracking-tight">Bem Me Quer</h1>
+        <p class="text-lg md:text-xl font-bold text-[#1F3A56]/80 mt-2">Calculadora de orçamentos</p>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- formulário -->
+        <section class="lg:col-span-7 bg-[#F5EEDD] border-2 border-[#E2DA9D] rounded-3xl p-6 md:p-8 shadow-sm space-y-7">
+
+          <header class="border-b border-[#1F3A56]/10 pb-4">
+            <h2 class="text-2xl md:text-3xl font-black text-[#1F3A56]">Detalhes do evento</h2>
+            <p class="text-sm font-medium text-[#1F3A56]/70 mt-1">Conte-nos sobre o seu evento para que possamos encontrar a melhor solução.</p>
+          </header>
+
+          <form id="calculatorForm" class="space-y-7">
+
+            <fieldset class="space-y-2">
+              <legend class="text-base font-bold text-[#1F3A56] mb-1">Espaço</legend>
+              <div class="grid grid-cols-3 gap-3">
+                <label class="chip"><input type="radio" name="espaco" value="villa" data-price="6000" data-name="Villa"><span>Villa</span></label>
+                <label class="chip"><input type="radio" name="espaco" value="garden" data-price="5500" data-name="Garden"><span>Garden</span></label>
+                <label class="chip"><input type="radio" name="espaco" value="combo" data-price="9500" data-name="Villa + Garden" checked><span>Villa + Garden</span></label>
+              </div>
+              <p class="text-[11px] font-medium text-[#1F3A56]/70 mt-1">Selecione um dos espaços ou os dois juntos.</p>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-base font-bold text-[#1F3A56] mb-1">Tipo de evento</legend>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <label class="chip"><input type="radio" name="tipo" value="Casamento" checked><span>Casamento</span></label>
+                <label class="chip"><input type="radio" name="tipo" value="Formatura"><span>Formatura</span></label>
+                <label class="chip"><input type="radio" name="tipo" value="Aniversário"><span>Aniversário</span></label>
+                <label class="chip"><input type="radio" name="tipo" value="Corporativo"><span>Corporativo</span></label>
+                <label class="chip"><input type="radio" name="tipo" value="Religioso"><span>Religioso</span></label>
+                <label class="chip"><input type="radio" name="tipo" value="Outro"><span>Outro</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-base font-bold text-[#1F3A56] mb-1">Duração do evento</legend>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <label class="chip"><input type="radio" name="duracao" value="4" data-extra="0" checked><span>4 Horas (Base)</span></label>
+                <label class="chip"><input type="radio" name="duracao" value="5" data-extra="500"><span>5 Horas (+R$500)</span></label>
+                <label class="chip"><input type="radio" name="duracao" value="6" data-extra="1000"><span>6 Horas (+R$1000)</span></label>
+                <label class="chip"><input type="radio" name="duracao" value="7" data-extra="1500"><span>7 Horas (+R$1500)</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-base font-bold text-[#1F3A56] mb-1">Número estimado de convidados</legend>
+              <div class="grid grid-cols-3 gap-3">
+                <label class="chip"><input type="radio" name="convidados" value="80" data-label="Até 80"><span>Até 80</span></label>
+                <label class="chip"><input type="radio" name="convidados" value="100" data-label="81-100"><span>81-100</span></label>
+                <label class="chip"><input type="radio" name="convidados" value="120" data-label="101-120" checked><span>101-120</span></label>
+                <label class="chip"><input type="radio" name="convidados" value="150" data-label="121-150"><span>121-150</span></label>
+                <label class="chip"><input type="radio" name="convidados" value="180" data-label="151-180"><span>151-180</span></label>
+                <label class="chip"><input type="radio" name="convidados" value="200" data-label="181-200"><span>181-200</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-base font-bold text-[#1F3A56] mb-1">Serviços adicionais</legend>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="chip"><input type="checkbox" name="servicos" value="acai" data-per-guest="12" data-name="Carrinho de açaí"><span>Carrinho de açaí</span></label>
+                <label class="chip"><input type="checkbox" name="servicos" value="buffet" data-per-guest="45" data-name="Buffet" checked><span>Buffet</span></label>
+                <label class="chip"><input type="checkbox" name="servicos" value="cabine" data-fixed="1200" data-name="Cabine fotográfica"><span>Cabine fotográfica</span></label>
+                <label class="chip"><input type="checkbox" name="servicos" value="dj" data-fixed="1800" data-name="DJ" checked><span>DJ</span></label>
+              </div>
+              <p class="text-[11px] font-medium text-[#1F3A56]/70 mt-1">Açaí e Buffet são cobrados pelo número estimado de convidados · DJ e Cabine têm valor fixo.</p>
+            </fieldset>
+
+            <fieldset class="space-y-2 bg-white/60 p-4 rounded-2xl border border-[#D6CEB8]">
+              <legend class="text-base font-bold text-[#1F3A56] mb-1 px-1">Forma de pagamento</legend>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="chip"><input type="radio" name="pagamento" value="pix" data-discount="0.10" checked><span>À vista (PIX -10% OFF)</span></label>
+                <label class="chip"><input type="radio" name="pagamento" value="cartao" data-discount="0"><span>Parcelado (até 10x)</span></label>
+              </div>
+            </fieldset>
+
+            <div class="space-y-2">
+              <label for="formNotes" class="block text-base font-bold text-[#1F3A56]">Observações</label>
+              <textarea id="formNotes" name="observacoes" rows="3" maxlength="500" placeholder="Algum pedido especial, tema ou necessidade específica?" class="w-full bg-white border border-[#D6CEB8] rounded-2xl p-3.5 text-sm text-[#1F3A56] focus:border-[#2E7A72]"></textarea>
+            </div>
+
+            <div>
+              <button type="submit" id="btnRecalculate" class="w-full bg-[#2E7A72] hover:bg-[#25645d] text-white font-extrabold text-lg py-4 rounded-2xl shadow-md transition-all active:scale-[0.99]">
+                CALCULAR ORÇAMENTO
+              </button>
+            </div>
+
+          </form>
+        </section>
+
+        <!-- resumo -->
+        <aside class="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+
+          <h2 class="text-2xl md:text-3xl font-black text-[#1F3A56]">Resumo do orçamento</h2>
+
+          <!-- Tailwind x CSS puro (cartão "Valor total"):
+               section:  bg-[#F5EEDD] = background-color: #F5EEDD
+                         border-2 border-[#E2DA9D] = border: 2px solid #E2DA9D
+                         rounded-3xl = border-radius: 1.5rem
+                         p-6 md:p-7 = padding: 1.5rem (1.75rem a partir de 768px)
+                         shadow-sm = box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05)
+                         text-center relative overflow-hidden = text-align: center; position: relative; overflow: hidden
+               h3:       text-sm = font-size: 0.875rem; line-height: 1.25rem
+                         font-bold uppercase tracking-wider = font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em
+                         mb-2 = margin-bottom: 0.5rem
+               preço:    text-4xl md:text-5xl = font-size: 2.25rem (3rem a partir de 768px)
+                         font-black tracking-tight = font-weight: 900; letter-spacing: -0.025em
+               validade: text-xs font-semibold text-[#1F3A56]/70 mt-1 = font-size: 0.75rem; font-weight: 600; color: rgb(31 58 86 / 0.7); margin-top: 0.25rem
+               botão:    w-full py-4 px-5 rounded-2xl = width: 100%; padding: 1rem 1.25rem; border-radius: 1rem
+                         flex items-center justify-center gap-2 = display: flex; align-items: center; justify-content: center; gap: 0.5rem
+                         shadow-md = box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)
+               O cartão inteiro em CSS puro está comentado no final de css/orcamento.css (.cartao-total) -->
+          <section class="bg-[#F5EEDD] border-2 border-[#E2DA9D] rounded-3xl p-6 md:p-7 shadow-sm text-center relative overflow-hidden">
+            <h3 class="block text-sm font-bold text-[#1F3A56] uppercase tracking-wider mb-2">Valor total do orçamento</h3>
+            <div class="my-3">
+              <span id="displayTotalPrice" class="text-4xl md:text-5xl font-black text-[#1F3A56] tracking-tight block" aria-live="polite">R$ 16.740,00</span>
+              <span id="displayValidity" class="text-xs font-semibold text-[#1F3A56]/70 mt-1 block">Válido para a data selecionada</span>
+            </div>
+            <div class="mt-6">
+              <button type="button" id="btnReserveTopCTA" class="btn-cta-gold w-full py-4 px-5 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-md">
+                <span>RESERVAR ESTA DATA</span>
+                <span class="text-xl" aria-hidden="true">&rarr;</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- calendário -->
+          <section class="bg-white border-2 border-[#2E7A72] rounded-3xl p-5 shadow-sm">
+            <header class="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-[#2E7A72]/20">
+              <h3 id="cal-titulo" class="text-lg font-black text-[#1F3A56] flex items-center gap-2">
+                <svg class="w-5 h-5 text-[#2E7A72]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Disponibilidade - Outubro
+              </h3>
+              <span id="badgeSelectedDate" class="text-xs font-bold text-white bg-[#2E7A72] px-2.5 py-1 rounded-full whitespace-nowrap">17 de Outubro</span>
+            </header>
+
+            <p id="cal-dica" class="text-[11px] font-medium text-[#1F3A56]/70 mb-3">Clique no dia para simular a reserva. Dias de fim de semana (Sex/Sáb/Dom) têm taxa de +20%. Dias riscados já estão reservados.</p>
+
+            <div class="grid grid-cols-7 gap-1 text-center text-xs font-black text-[#1F3A56]/70 mb-1" aria-hidden="true">
+              <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span class="text-[#8A5D0E]">S</span><span class="text-[#8A5D0E]">S</span>
+            </div>
+
+            <div id="calendarGrid" class="grid grid-cols-7 gap-1.5" role="group" aria-labelledby="cal-titulo" aria-describedby="cal-dica">
+            </div>
+          </section>
+
+          <!-- custos -->
+          <section class="bg-[#F5EEDD] border border-[#E2DA9D] rounded-3xl p-6 space-y-3 text-sm text-[#1F3A56]">
+            <h3 class="font-black text-base border-b border-[#1F3A56]/15 pb-2">Detalhamento dos custos:</h3>
+
+            <div class="space-y-2 font-semibold">
+              <div class="flex justify-between gap-3">
+                <span>• Locação do espaço:</span>
+                <span id="costSpace">R$ 9.500,00</span>
+              </div>
+              <div id="rowWeekend" class="flex justify-between gap-3 text-[#8A5D0E]">
+                <span>• Suplemento fim de semana (+20%):</span>
+                <span id="costWeekend">+ R$ 1.900,00</span>
+              </div>
+              <div id="rowDuration" class="flex justify-between gap-3 text-[#1F3A56]/80 hidden">
+                <span>• Duração adicional:</span>
+                <span id="costDuration">+ R$ 0,00</span>
+              </div>
+              <div class="flex justify-between gap-3">
+                <span>• Serviços adicionais:</span>
+                <span id="costServices">R$ 7.200,00</span>
+              </div>
+              <div id="rowDiscount" class="flex justify-between gap-3 text-[#2E7A72] font-extrabold border-t border-[#1F3A56]/10 pt-2">
+                <span>• Desconto à vista (PIX 10%):</span>
+                <span id="costDiscount">- R$ 1.860,00</span>
+              </div>
+            </div>
+
+            <div class="border-t border-[#1F3A56]/15 pt-4 mt-4">
+              <h4 class="font-bold text-xs uppercase tracking-wider text-[#1F3A56]/70 mb-2">Próximos passos:</h4>
+              <ol class="text-xs font-bold space-y-1.5 text-[#1F3A56] list-decimal list-inside">
+                <li>Agendar uma visita ao salão</li>
+                <li>Reservar uma data preferida</li>
+                <li>Confirmar serviços e contrato final</li>
+              </ol>
+            </div>
+
+            <div class="pt-2">
+              <button type="button" id="btnFormalProposal" class="w-full bg-[#2E7A72] hover:bg-[#25645d] text-white font-extrabold text-sm py-3.5 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+                <span>SOLICITAR PROPOSTA FORMAL</span>
+              </button>
+              <p class="text-[11px] text-center text-[#1F3A56]/70 mt-2 font-medium">Preços baseados nas seleções e sujeitos a disponibilidade de agenda.</p>
+            </div>
+          </section>
+
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- janela de reserva -->
+  <dialog id="reservationModal" class="modal-reserva" aria-labelledby="modalHeading">
+    <div class="bg-[#F5EEDD] border-2 border-[#2E7A72] rounded-3xl p-6 md:p-8 shadow-2xl relative">
+
+      <button type="button" id="btnCloseModal" class="absolute top-4 right-4 text-[#1F3A56]/70 hover:text-[#1F3A56] p-2 rounded-full hover:bg-stone-200/50 transition-colors" aria-label="Fechar janela">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <header class="mb-4 pr-10">
+        <span class="text-[11px] font-black uppercase text-white bg-[#2E7A72] px-2.5 py-1 rounded-md inline-block mb-2">Pré-reserva de data</span>
+        <h2 id="modalHeading" class="text-2xl font-black text-[#1F3A56]">Solicitar proposta formal</h2>
+        <p class="text-xs font-medium text-[#1F3A56]/70 mt-1">Confira o resumo do seu orçamento e informe seu contato para atendimento no WhatsApp.</p>
+      </header>
+
+      <dl class="bg-white p-4 rounded-2xl border border-[#D6CEB8] space-y-1.5 text-xs text-[#1F3A56] mb-5">
+        <div class="flex justify-between gap-3 border-b border-stone-100 pb-1.5"><dt class="font-bold">Data selecionada:</dt><dd id="modalDate" class="font-black text-[#2E7A72] text-right">17 de Outubro</dd></div>
+        <div class="flex justify-between gap-3 border-b border-stone-100 pb-1.5"><dt class="font-bold">Espaço e evento:</dt><dd id="modalSpace" class="font-semibold text-right">Villa + Garden (Casamento)</dd></div>
+        <div class="flex justify-between gap-3 border-b border-stone-100 pb-1.5"><dt class="font-bold">Convidados:</dt><dd id="modalGuests" class="font-semibold text-right">101-120 convidados</dd></div>
+        <div class="flex justify-between gap-3 pt-1 text-sm font-black"><dt>Valor estimado:</dt><dd id="modalTotal" class="text-[#2E7A72] text-base">R$ 16.740,00</dd></div>
+      </dl>
+
+      <form id="modalContactForm" class="space-y-3.5">
+        <div>
+          <label for="inputName" class="block text-xs font-bold text-[#1F3A56] mb-1">Seu nome completo *</label>
+          <input type="text" id="inputName" name="nome" required minlength="3" maxlength="80" autocomplete="name" placeholder="Digite seu nome" class="campo w-full bg-white border border-[#D6CEB8] rounded-xl p-3 text-sm text-[#1F3A56] focus:border-[#2E7A72]">
+        </div>
+
+        <div>
+          <label for="inputPhone" class="block text-xs font-bold text-[#1F3A56] mb-1">WhatsApp com DDD *</label>
+          <input type="tel" id="inputPhone" name="whatsapp" required pattern="\(?[0-9]{2}\)?\s?9?[0-9]{4}-?[0-9]{4}" title="Digite o DDD e o número. Ex.: (61) 99999-9999" autocomplete="tel" placeholder="(61) 99999-9999" aria-describedby="dicaPhone" class="campo w-full bg-white border border-[#D6CEB8] rounded-xl p-3 text-sm text-[#1F3A56] focus:border-[#2E7A72]">
+          <p id="dicaPhone" class="text-[11px] font-medium text-[#1F3A56]/70 mt-1">DDD + número. Ex.: (61) 99999-9999</p>
+        </div>
+
+        <p class="text-[11px] font-medium text-[#1F3A56]/70">* Campos obrigatórios</p>
+
+        <button type="submit" class="btn-cta-gold w-full py-4 rounded-xl font-black text-base flex items-center justify-center gap-2 mt-2">
+          <span>Enviar proposta para o WhatsApp</span>
+          <span aria-hidden="true">&rarr;</span>
+        </button>
+      </form>
+
+    </div>
+  </dialog>
+
+  <!-- rodapé -->
+  <footer class="bg-[#1F3A56] text-white py-8 border-t border-stone-800 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <p class="text-base font-black text-[#A9D6E8]">Bem Me Quer Espaço de Eventos</p>
+        <p class="text-xs text-white/70 mt-1">Transformando celebrações em memórias inesquecíveis.</p>
+      </div>
+      <nav aria-label="Links do rodapé" class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs">
+        <a href="index.html" class="text-white/80 hover:text-white">Início</a>
+        <a href="espacos.html" class="text-white/80 hover:text-white">Espaços</a>
+        <a href="galeria.html" class="text-white/80 hover:text-white">Galeria</a>
+        <a href="faq.html" class="text-white/80 hover:text-white">FAQ</a>
+      </nav>
+      <div class="text-xs text-white/70 text-center sm:text-right">
+        <p>&copy; 2026 Bem Me Quer. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

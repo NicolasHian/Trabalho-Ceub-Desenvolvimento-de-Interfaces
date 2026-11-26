@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espaços - Espaço Bem Me Quer</title>
+  <meta name="description" content="Conheça o Garden e a Villa do Espaço Bem Me Quer: estrutura, diferenças e valores.">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
+</head>
+<body>
+
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- menu -->
+<nav class="navbar" id="navbar" aria-label="Menu principal">
+  <a href="index.html" class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 64 64" width="34" height="34">
+        <g fill="currentColor">
+          <ellipse cx="32" cy="14" rx="7" ry="13"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(45 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(90 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(135 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(180 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(225 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(270 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(315 32 32)"/>
+        </g>
+        <circle cx="32" cy="32" r="7" fill="var(--brass)"/>
+      </svg>
+    </span>
+    <span class="brand-name">Bem Me Quer</span>
+  </a>
+
+  <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="nav-links" id="navLinks">
+    <a href="espacos.html" aria-current="page">Espaços</a>
+    <a href="galeria.html">Galeria</a>
+    <a href="faq.html">FAQ</a>
+    <a href="orcamento.html" class="nav-cta">Solicitar orçamento</a>
+  </div>
+</nav>
+
+<!-- topo -->
+<header class="page-hero">
+  <div class="cta-petal" aria-hidden="true">✿</div>
+  <p class="eyebrow eyebrow--light">Nossos espaços</p>
+  <h1>Garden &amp; Villa</h1>
+  <p class="page-hero-sub">Dois ambientes no mesmo endereço. Escolha um deles ou junte os dois para uma festa ainda maior.</p>
+</header>
+
+<main id="conteudo">
+  <div class="section">
+    <!-- garden -->
+    <article class="espaco-bloco">
+      <div class="space-photos">
+        <img src="img/garden-jantar-luzes.jpg" alt="Jantar ao ar livre com mesas e varal de luzes no jardim" width="1000" height="750" loading="lazy">
+        <img src="img/garden-gramado-palmeiras.jpg" alt="Gramado amplo com palmeiras" width="750" height="1000" loading="lazy">
+        <img src="img/garden-arvore-caminho.jpg" alt="Árvore e caminho de pedras no jardim" width="751" height="1000" loading="lazy">
+      </div>
+      <div class="space-text">
+        <p class="eyebrow">Ao ar livre</p>
+        <h2>Garden</h2>
+        <p class="lede">Jardim aberto com piscina, gazebo e amplo gramado - cenário natural para cerimônias ao ar livre e festas sob as estrelas.</p>
+        <ul class="feature-list">
+          <li>Amplo gramado com palmeiras</li>
+          <li>Piscina</li>
+          <li>Gazebo para a cerimônia</li>
+          <li>Ideal para cerimônias e festas ao ar livre</li>
+        </ul>
+        <p class="price-tag">A partir de <strong>R$ 5.500</strong> · 4 horas</p>
+        <a href="orcamento.html?espaco=garden" class="btn btn--primary">Simular orçamento do Garden</a>
+      </div>
+    </article>
+
+    <!-- villa -->
+    <article class="espaco-bloco espaco-bloco--reverse">
+      <div class="space-photos">
+        <img src="img/villa-salao-pista.jpg" alt="Salão da Villa com mesas e pista iluminada" width="750" height="1000" loading="lazy">
+        <img src="img/villa-pista-danca.jpg" alt="Pista de dança iluminada no salão" width="750" height="1000" loading="lazy">
+        <img src="img/villa-varanda.jpg" alt="Varanda coberta ao entardecer" width="750" height="1000" loading="lazy">
+      </div>
+      <div class="space-text">
+        <p class="eyebrow">Salão coberto</p>
+        <h2>Villa</h2>
+        <p class="lede">Salão coberto com estrutura completa: churrasqueira, forno de pizza e três piscinas - conforto para eventos em qualquer clima.</p>
+        <ul class="feature-list">
+          <li>Salão coberto com pista de dança</li>
+          <li>Churrasqueira e forno de pizza</li>
+          <li>Três piscinas</li>
+          <li>Festa garantida mesmo se chover</li>
+        </ul>
+        <p class="price-tag">A partir de <strong>R$ 6.000</strong> · 4 horas</p>
+        <a href="orcamento.html?espaco=villa" class="btn btn--primary">Simular orçamento da Villa</a>
+      </div>
+    </article>
+  </div>
+
+  <section class="section section--tight">
+    <div class="section-inner">
+      <p class="eyebrow">Compare</p>
+      <h2 id="compare-titulo">Qual espaço combina com a sua festa?</h2>
+    </div>
+    <div class="compare-wrap" role="region" aria-labelledby="compare-titulo" tabindex="0">
+      <table class="compare">
+        <caption class="sr-only">Comparação entre Garden, Villa e Villa + Garden</caption>
+        <thead>
+          <tr><td></td><th scope="col">Garden</th><th scope="col">Villa</th><th scope="col">Villa + Garden</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Tipo</th><td>Ao ar livre</td><td>Coberto</td><td>Os dois juntos</td></tr>
+          <tr><th scope="row">Destaques</th><td>Gramado, piscina e gazebo</td><td>Churrasqueira, forno de pizza e três piscinas</td><td>Toda a estrutura do espaço</td></tr>
+          <tr><th scope="row">Se chover</th><td>Precisa de plano B</td><td>Sem problema</td><td>A Villa protege a festa</td></tr>
+          <tr><th scope="row">Valor base (4h)</th><td>R$ 5.500</td><td>R$ 6.000</td><td>R$ 9.500</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="compare-note">Valores da calculadora para 4 horas, sem serviços extras. Sexta, sábado e domingo têm acréscimo de 20%.</p>
+  </section>
+
+  <section class="section section--tight">
+    <div class="section-inner">
+      <p class="eyebrow">Nos dois espaços</p>
+      <h2>Estrutura completa</h2>
+    </div>
+    <div class="service-grid">
+      <div class="service-card"><span class="service-icon" aria-hidden="true">👥</span><h3>Até 200 convidados</h3><p>Do encontro pequeno à festa grande.</p></div>
+      <div class="service-card"><span class="service-icon" aria-hidden="true">📅</span><h3>Todos os dias</h3><p>Disponível os 7 dias da semana.</p></div>
+      <div class="service-card"><span class="service-icon" aria-hidden="true">🍳</span><h3>Cozinha equipada</h3><p>Pronta para o buffet do seu evento.</p></div>
+      <div class="service-card"><span class="service-icon" aria-hidden="true">✨</span><h3>Serviços extras</h3><p>Buffet, Açaí, DJ e Cabine Fotográfica.</p></div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="cta-petal" aria-hidden="true">✿</div>
+    <p class="eyebrow eyebrow--light">Escolheu o seu espaço?</p>
+    <h2>Simule o valor da sua festa em poucos cliques</h2>
+    <a href="orcamento.html" class="btn btn--primary btn--lg">Calcular meu orçamento</a>
+  </section>
+</main>
+
+<!-- rodapé -->
+<footer class="site-footer">
+  <div class="footer-brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 64 64" width="28" height="28">
+        <g fill="currentColor">
+          <ellipse cx="32" cy="14" rx="7" ry="13"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(45 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(90 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(135 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(180 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(225 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(270 32 32)"/>
+          <ellipse cx="32" cy="14" rx="7" ry="13" transform="rotate(315 32 32)"/>
+        </g>
+        <circle cx="32" cy="32" r="7" fill="var(--brass-soft)"/>
+      </svg>
+    </span>
+    <span>Espaço Bem Me Quer</span>
+  </div>
+  <nav class="footer-links" aria-label="Links do rodapé">
+    <a href="index.html">Início</a>
+    <a href="espacos.html">Espaços</a>
+    <a href="galeria.html">Galeria</a>
+    <a href="faq.html">FAQ</a>
+    <a href="orcamento.html">Orçamento</a>
+  </nav>
+  <p class="footer-copy">&copy; <span id="ano">2026</span> Espaço Bem Me Quer - Garden &amp; Villa</p>
+</footer>
+
+</body>
+</html>
